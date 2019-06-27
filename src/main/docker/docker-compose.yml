@@ -1,0 +1,35 @@
+version: '3'
+services:    
+  expert-service:
+    image: registry-vpc.cn-hangzhou.aliyuncs.com/fengxin58/expert-service:0.0.1.RELEASE
+    hostname: expert-service
+    ports:
+    - 37606:37606/tcp
+    restart: always
+    environment:
+    - JAVA_HOME=/opt/jdk1.8.0_121
+    - LANG=en_US.UTF-8
+    - LC_ALL=en_US.UTF-8
+    - TZ=Asia/Shanghai
+    - PREFERRED_NETWORKS=10.0.9
+    - SERVER_PROFILE=prod
+    - SERVER_PORT=37606
+    - SERVER_NAME=expert-service
+    networks:
+    - global
+    healthcheck:
+      test:
+      - CMD
+      - curl
+      - -f
+      - http://localhost:37606/actuator/info
+      interval: 60s
+      timeout: 30s
+      retries: 5
+    labels:
+      aliyun.scale: '1'
+      aliyun.lb.port_37606: http://ebus:37606
+      aliyun.routing.port_37606: expert-service;http://expert-service.fengxin58.win
+networks:
+  global:
+    external: true

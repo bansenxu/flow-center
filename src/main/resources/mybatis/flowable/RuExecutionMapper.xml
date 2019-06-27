@@ -1,0 +1,348 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bootdo.modules.flowable.dao.RuExecutionDao">
+
+	<select id="get" resultType="com.bootdo.modules.flowable.domain.RuExecutionDO">
+		select `ID_`,`REV_`,`PROC_INST_ID_`,`BUSINESS_KEY_`,`PARENT_ID_`,`PROC_DEF_ID_`,`SUPER_EXEC_`,`ACT_ID_`,`IS_ACTIVE_`,`IS_CONCURRENT_`,`IS_SCOPE_`,`IS_EVENT_SCOPE_`,`SUSPENSION_STATE_`,`CACHED_ENT_STATE_`,`TENANT_ID_`,`NAME_`,`LOCK_TIME_`,`ROOT_PROC_INST_ID_`,`IS_MI_ROOT_`,`START_TIME_`,`START_USER_ID_`,`IS_COUNT_ENABLED_`,`EVT_SUBSCR_COUNT_`,`TASK_COUNT_`,`JOB_COUNT_`,`TIMER_JOB_COUNT_`,`SUSP_JOB_COUNT_`,`DEADLETTER_JOB_COUNT_`,`VAR_COUNT_`,`ID_LINK_COUNT_`,`START_ACT_ID_`,`CALLBACK_ID_`,`CALLBACK_TYPE_` from ACT_RU_EXECUTION where ID_ = #{value}
+	</select>
+
+	<select id="list" resultType="com.bootdo.modules.flowable.domain.RuExecutionDO">
+		SELECT
+		ACT_RU_EXECUTION.`ID_`,
+		ACT_RU_EXECUTION.`REV_`,
+		ACT_RU_EXECUTION.`PROC_INST_ID_`,
+		ACT_RU_EXECUTION.`BUSINESS_KEY_`,
+		ACT_RU_EXECUTION.`PARENT_ID_`,
+		ACT_RU_EXECUTION.`PROC_DEF_ID_`,
+		ACT_RU_EXECUTION.`SUPER_EXEC_`,
+		ACT_RU_EXECUTION.`ACT_ID_`,
+		ACT_RU_EXECUTION.`IS_ACTIVE_`,
+		ACT_RU_EXECUTION.`IS_CONCURRENT_`,
+		ACT_RU_EXECUTION.`IS_SCOPE_`,
+		ACT_RU_EXECUTION.`IS_EVENT_SCOPE_`,
+		ACT_RU_EXECUTION.`SUSPENSION_STATE_`,
+		ACT_RU_EXECUTION.`CACHED_ENT_STATE_`,
+		ACT_RU_EXECUTION.`TENANT_ID_`,
+		ACT_RU_EXECUTION.`NAME_`,
+		ACT_RU_EXECUTION.`LOCK_TIME_`,
+		ACT_RU_EXECUTION.`ROOT_PROC_INST_ID_`,
+		ACT_RU_EXECUTION.`IS_MI_ROOT_`,
+		ACT_RU_EXECUTION.`START_TIME_`,
+		ACT_RU_EXECUTION.`START_USER_ID_`,
+		ACT_RU_EXECUTION.`IS_COUNT_ENABLED_`,
+		ACT_RU_EXECUTION.`EVT_SUBSCR_COUNT_`,
+		ACT_RU_EXECUTION.`TASK_COUNT_`,
+		ACT_RU_EXECUTION.`JOB_COUNT_`,
+		ACT_RU_EXECUTION.`TIMER_JOB_COUNT_`,
+		ACT_RU_EXECUTION.`SUSP_JOB_COUNT_`,
+		ACT_RU_EXECUTION.`DEADLETTER_JOB_COUNT_`,
+		ACT_RU_EXECUTION.`VAR_COUNT_`,
+		ACT_RU_EXECUTION.`ID_LINK_COUNT_`,
+		ACT_RU_EXECUTION.`START_ACT_ID_`,
+		ACT_RU_EXECUTION.`CALLBACK_ID_`,
+		ACT_RU_EXECUTION.`CALLBACK_TYPE_`
+		FROM
+		ACT_RU_EXECUTION
+		INNER JOIN ACT_RE_PROCDEF ap ON ap.ID_ = ACT_RU_EXECUTION.PROC_DEF_ID_
+		AND PARENT_ID_ IS NULL
+		AND ap.CATEGORY_ = #{code}
+		<where>
+		  		  <if test="id != null and id != ''"> and ID_ = #{id} </if>
+		  		  <if test="rev != null and rev != ''"> and REV_ = #{rev} </if>
+		  		  <if test="procInstId != null and procInstId != ''"> and PROC_INST_ID_ = #{procInstId} </if>
+		  		  <if test="businessKey != null and businessKey != ''"> and BUSINESS_KEY_ = #{businessKey} </if>
+		  		  <if test="parentId != null and parentId != ''"> and PARENT_ID_ = #{parentId} </if>
+		  		  <if test="procDefId != null and procDefId != ''"> and PROC_DEF_ID_ = #{procDefId} </if>
+		  		  <if test="superExec != null and superExec != ''"> and SUPER_EXEC_ = #{superExec} </if>
+		  		  <if test="actId != null and actId != ''"> and ACT_ID_ = #{actId} </if>
+		  		  <if test="isActive != null and isActive != ''"> and IS_ACTIVE_ = #{isActive} </if>
+		  		  <if test="isConcurrent != null and isConcurrent != ''"> and IS_CONCURRENT_ = #{isConcurrent} </if>
+		  		  <if test="isScope != null and isScope != ''"> and IS_SCOPE_ = #{isScope} </if>
+		  		  <if test="isEventScope != null and isEventScope != ''"> and IS_EVENT_SCOPE_ = #{isEventScope} </if>
+		  		  <if test="suspensionState != null and suspensionState != ''"> and SUSPENSION_STATE_ = #{suspensionState} </if>
+		  		  <if test="cachedEntState != null and cachedEntState != ''"> and CACHED_ENT_STATE_ = #{cachedEntState} </if>
+		  		  <if test="tenantId != null and tenantId != ''"> and TENANT_ID_ = #{tenantId} </if>
+		  		  <if test="name != null and name != ''"> and NAME_ = #{name} </if>
+		  		  <if test="lockTime != null and lockTime != ''"> and LOCK_TIME_ = #{lockTime} </if>
+		  		  <if test="rootProcInstId != null and rootProcInstId != ''"> and ROOT_PROC_INST_ID_ = #{rootProcInstId} </if>
+		  		  <if test="isMiRoot != null and isMiRoot != ''"> and IS_MI_ROOT_ = #{isMiRoot} </if>
+		  		  <if test="startTime != null and startTime != ''"> and START_TIME_ = #{startTime} </if>
+		  		  <if test="startUserId != null and startUserId != ''"> and START_USER_ID_ = #{startUserId} </if>
+		  		  <if test="isCountEnabled != null and isCountEnabled != ''"> and IS_COUNT_ENABLED_ = #{isCountEnabled} </if>
+		  		  <if test="evtSubscrCount != null and evtSubscrCount != ''"> and EVT_SUBSCR_COUNT_ = #{evtSubscrCount} </if>
+		  		  <if test="taskCount != null and taskCount != ''"> and TASK_COUNT_ = #{taskCount} </if>
+		  		  <if test="jobCount != null and jobCount != ''"> and JOB_COUNT_ = #{jobCount} </if>
+		  		  <if test="timerJobCount != null and timerJobCount != ''"> and TIMER_JOB_COUNT_ = #{timerJobCount} </if>
+		  		  <if test="suspJobCount != null and suspJobCount != ''"> and SUSP_JOB_COUNT_ = #{suspJobCount} </if>
+		  		  <if test="deadletterJobCount != null and deadletterJobCount != ''"> and DEADLETTER_JOB_COUNT_ = #{deadletterJobCount} </if>
+		  		  <if test="varCount != null and varCount != ''"> and VAR_COUNT_ = #{varCount} </if>
+		  		  <if test="idLinkCount != null and idLinkCount != ''"> and ID_LINK_COUNT_ = #{idLinkCount} </if>
+		  		  <if test="startActId != null and startActId != ''"> and START_ACT_ID_ = #{startActId} </if>
+		  		  <if test="callbackId != null and callbackId != ''"> and CALLBACK_ID_ = #{callbackId} </if>
+		  		  <if test="callbackType != null and callbackType != ''"> and CALLBACK_TYPE_ = #{callbackType} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+			<otherwise>
+                order by ID_ desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+
+	<select id="taskList" resultType="java.util.Map">
+		select
+		DISTINCT
+		h.business_key_,h.id_,h.name_,h.task_def_key_,h.DESCRIPTION_,
+		ap.category_,
+		ac.name as category_name_,h.create_time_,
+		h.PRIORITY_
+		from
+		(
+		select
+		e.business_key_,
+		t.id_,t.name_,t.task_def_key_,t.DESCRIPTION_,t.create_time_,t.proc_def_id_,
+		t.PRIORITY_
+		from
+		ACT_RU_TASK t, ACT_RU_EXECUTION e, ACT_RU_IDENTITYLINK i
+		where
+		t.proc_inst_id_ = e.proc_inst_id_  and
+
+		(
+		i.task_id_ = t.id_ and
+		(
+		i.group_id_ in (select group_id_ from ACT_ID_MEMBERSHIP where user_id_ =  #{userId} ) or
+		i.user_id_ =  #{userId}
+		)
+		)
+		union all
+		select
+		DISTINCT
+		e.business_key_,
+		t.id_,t.name_,t.task_def_key_,t.DESCRIPTION_,t.create_time_,t.proc_def_id_,t.PRIORITY_
+		from
+		ACT_RU_TASK t, ACT_RU_EXECUTION e
+		where
+		t.proc_inst_id_ = e.proc_inst_id_  and
+		t.assignee_ = #{userId}
+		) h
+		left join ACT_RE_PROCDEF ap on ap.id_=h.proc_def_id_
+		left join act_de_category ac on ac.code=ap.category_
+		order by h.create_time_ desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+
+	<select id="taskCount" resultType="int">
+		select count(*)
+		from
+		(
+		select
+		DISTINCT
+		e.business_key_,
+		t.id_,t.name_,t.task_def_key_,t.DESCRIPTION_,t.create_time_,t.proc_def_id_,
+		t.PRIORITY_
+		from
+		ACT_RU_TASK t, ACT_RU_EXECUTION e, ACT_RU_IDENTITYLINK i
+		where
+		t.proc_inst_id_ = e.proc_inst_id_  and
+
+		(
+		i.task_id_ = t.id_ and
+		(
+		i.group_id_ in (select group_id_ from ACT_ID_MEMBERSHIP where user_id_ =  #{userId} ) or
+		i.user_id_ =  #{userId}
+		)
+		)
+		union all
+		select
+		DISTINCT
+		e.business_key_,
+		t.id_,t.name_,t.task_def_key_,t.DESCRIPTION_,t.create_time_,t.proc_def_id_,t.PRIORITY_
+		from
+		ACT_RU_TASK t, ACT_RU_EXECUTION e
+		where
+		t.proc_inst_id_ = e.proc_inst_id_  and
+		t.assignee_ = #{userId}
+		) h
+		left join ACT_RE_PROCDEF ap on ap.id_=h.proc_def_id_
+		left join act_de_category ac on ac.code=ap.category_
+	</select>
+
+ 	<select id="count" resultType="int">
+		select count(*)
+		FROM
+		ACT_RU_EXECUTION
+		INNER JOIN ACT_RE_PROCDEF ap ON ap.ID_ = ACT_RU_EXECUTION.PROC_DEF_ID_
+		AND PARENT_ID_ IS NULL
+		AND ap.CATEGORY_ = #{code}
+		<where>
+			<if test="id != null and id != ''"> and ID_ = #{id} </if>
+			<if test="rev != null and rev != ''"> and REV_ = #{rev} </if>
+			<if test="procInstId != null and procInstId != ''"> and PROC_INST_ID_ = #{procInstId} </if>
+			<if test="businessKey != null and businessKey != ''"> and BUSINESS_KEY_ = #{businessKey} </if>
+			<if test="parentId != null and parentId != ''"> and PARENT_ID_ = #{parentId} </if>
+			<if test="procDefId != null and procDefId != ''"> and PROC_DEF_ID_ = #{procDefId} </if>
+			<if test="superExec != null and superExec != ''"> and SUPER_EXEC_ = #{superExec} </if>
+			<if test="actId != null and actId != ''"> and ACT_ID_ = #{actId} </if>
+			<if test="isActive != null and isActive != ''"> and IS_ACTIVE_ = #{isActive} </if>
+			<if test="isConcurrent != null and isConcurrent != ''"> and IS_CONCURRENT_ = #{isConcurrent} </if>
+			<if test="isScope != null and isScope != ''"> and IS_SCOPE_ = #{isScope} </if>
+			<if test="isEventScope != null and isEventScope != ''"> and IS_EVENT_SCOPE_ = #{isEventScope} </if>
+			<if test="suspensionState != null and suspensionState != ''"> and SUSPENSION_STATE_ = #{suspensionState} </if>
+			<if test="cachedEntState != null and cachedEntState != ''"> and CACHED_ENT_STATE_ = #{cachedEntState} </if>
+			<if test="tenantId != null and tenantId != ''"> and TENANT_ID_ = #{tenantId} </if>
+			<if test="name != null and name != ''"> and NAME_ = #{name} </if>
+			<if test="lockTime != null and lockTime != ''"> and LOCK_TIME_ = #{lockTime} </if>
+			<if test="rootProcInstId != null and rootProcInstId != ''"> and ROOT_PROC_INST_ID_ = #{rootProcInstId} </if>
+			<if test="isMiRoot != null and isMiRoot != ''"> and IS_MI_ROOT_ = #{isMiRoot} </if>
+			<if test="startTime != null and startTime != ''"> and START_TIME_ = #{startTime} </if>
+			<if test="startUserId != null and startUserId != ''"> and START_USER_ID_ = #{startUserId} </if>
+			<if test="isCountEnabled != null and isCountEnabled != ''"> and IS_COUNT_ENABLED_ = #{isCountEnabled} </if>
+			<if test="evtSubscrCount != null and evtSubscrCount != ''"> and EVT_SUBSCR_COUNT_ = #{evtSubscrCount} </if>
+			<if test="taskCount != null and taskCount != ''"> and TASK_COUNT_ = #{taskCount} </if>
+			<if test="jobCount != null and jobCount != ''"> and JOB_COUNT_ = #{jobCount} </if>
+			<if test="timerJobCount != null and timerJobCount != ''"> and TIMER_JOB_COUNT_ = #{timerJobCount} </if>
+			<if test="suspJobCount != null and suspJobCount != ''"> and SUSP_JOB_COUNT_ = #{suspJobCount} </if>
+			<if test="deadletterJobCount != null and deadletterJobCount != ''"> and DEADLETTER_JOB_COUNT_ = #{deadletterJobCount} </if>
+			<if test="varCount != null and varCount != ''"> and VAR_COUNT_ = #{varCount} </if>
+			<if test="idLinkCount != null and idLinkCount != ''"> and ID_LINK_COUNT_ = #{idLinkCount} </if>
+			<if test="startActId != null and startActId != ''"> and START_ACT_ID_ = #{startActId} </if>
+			<if test="callbackId != null and callbackId != ''"> and CALLBACK_ID_ = #{callbackId} </if>
+			<if test="callbackType != null and callbackType != ''"> and CALLBACK_TYPE_ = #{callbackType} </if>
+		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.bootdo.modules.flowable.domain.RuExecutionDO">
+		insert into ACT_RU_EXECUTION
+		(
+			`ID_`, 
+			`REV_`, 
+			`PROC_INST_ID_`, 
+			`BUSINESS_KEY_`, 
+			`PARENT_ID_`, 
+			`PROC_DEF_ID_`, 
+			`SUPER_EXEC_`, 
+			`ACT_ID_`, 
+			`IS_ACTIVE_`, 
+			`IS_CONCURRENT_`, 
+			`IS_SCOPE_`, 
+			`IS_EVENT_SCOPE_`, 
+			`SUSPENSION_STATE_`, 
+			`CACHED_ENT_STATE_`, 
+			`TENANT_ID_`, 
+			`NAME_`, 
+			`LOCK_TIME_`, 
+			`ROOT_PROC_INST_ID_`, 
+			`IS_MI_ROOT_`, 
+			`START_TIME_`, 
+			`START_USER_ID_`, 
+			`IS_COUNT_ENABLED_`, 
+			`EVT_SUBSCR_COUNT_`, 
+			`TASK_COUNT_`, 
+			`JOB_COUNT_`, 
+			`TIMER_JOB_COUNT_`, 
+			`SUSP_JOB_COUNT_`, 
+			`DEADLETTER_JOB_COUNT_`, 
+			`VAR_COUNT_`, 
+			`ID_LINK_COUNT_`, 
+			`START_ACT_ID_`, 
+			`CALLBACK_ID_`, 
+			`CALLBACK_TYPE_`
+		)
+		values
+		(
+			#{id}, 
+			#{rev}, 
+			#{procInstId}, 
+			#{businessKey}, 
+			#{parentId}, 
+			#{procDefId}, 
+			#{superExec}, 
+			#{actId}, 
+			#{isActive}, 
+			#{isConcurrent}, 
+			#{isScope}, 
+			#{isEventScope}, 
+			#{suspensionState}, 
+			#{cachedEntState}, 
+			#{tenantId}, 
+			#{name}, 
+			#{lockTime}, 
+			#{rootProcInstId}, 
+			#{isMiRoot}, 
+			#{startTime}, 
+			#{startUserId}, 
+			#{isCountEnabled}, 
+			#{evtSubscrCount}, 
+			#{taskCount}, 
+			#{jobCount}, 
+			#{timerJobCount}, 
+			#{suspJobCount}, 
+			#{deadletterJobCount}, 
+			#{varCount}, 
+			#{idLinkCount}, 
+			#{startActId}, 
+			#{callbackId}, 
+			#{callbackType}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.bootdo.modules.flowable.domain.RuExecutionDO">
+		update ACT_RU_EXECUTION 
+		<set>
+			<if test="rev != null">`REV_` = #{rev}, </if>
+			<if test="procInstId != null">`PROC_INST_ID_` = #{procInstId}, </if>
+			<if test="businessKey != null">`BUSINESS_KEY_` = #{businessKey}, </if>
+			<if test="parentId != null">`PARENT_ID_` = #{parentId}, </if>
+			<if test="procDefId != null">`PROC_DEF_ID_` = #{procDefId}, </if>
+			<if test="superExec != null">`SUPER_EXEC_` = #{superExec}, </if>
+			<if test="actId != null">`ACT_ID_` = #{actId}, </if>
+			<if test="isActive != null">`IS_ACTIVE_` = #{isActive}, </if>
+			<if test="isConcurrent != null">`IS_CONCURRENT_` = #{isConcurrent}, </if>
+			<if test="isScope != null">`IS_SCOPE_` = #{isScope}, </if>
+			<if test="isEventScope != null">`IS_EVENT_SCOPE_` = #{isEventScope}, </if>
+			<if test="suspensionState != null">`SUSPENSION_STATE_` = #{suspensionState}, </if>
+			<if test="cachedEntState != null">`CACHED_ENT_STATE_` = #{cachedEntState}, </if>
+			<if test="tenantId != null">`TENANT_ID_` = #{tenantId}, </if>
+			<if test="name != null">`NAME_` = #{name}, </if>
+			<if test="lockTime != null">`LOCK_TIME_` = #{lockTime}, </if>
+			<if test="rootProcInstId != null">`ROOT_PROC_INST_ID_` = #{rootProcInstId}, </if>
+			<if test="isMiRoot != null">`IS_MI_ROOT_` = #{isMiRoot}, </if>
+			<if test="startTime != null">`START_TIME_` = #{startTime}, </if>
+			<if test="startUserId != null">`START_USER_ID_` = #{startUserId}, </if>
+			<if test="isCountEnabled != null">`IS_COUNT_ENABLED_` = #{isCountEnabled}, </if>
+			<if test="evtSubscrCount != null">`EVT_SUBSCR_COUNT_` = #{evtSubscrCount}, </if>
+			<if test="taskCount != null">`TASK_COUNT_` = #{taskCount}, </if>
+			<if test="jobCount != null">`JOB_COUNT_` = #{jobCount}, </if>
+			<if test="timerJobCount != null">`TIMER_JOB_COUNT_` = #{timerJobCount}, </if>
+			<if test="suspJobCount != null">`SUSP_JOB_COUNT_` = #{suspJobCount}, </if>
+			<if test="deadletterJobCount != null">`DEADLETTER_JOB_COUNT_` = #{deadletterJobCount}, </if>
+			<if test="varCount != null">`VAR_COUNT_` = #{varCount}, </if>
+			<if test="idLinkCount != null">`ID_LINK_COUNT_` = #{idLinkCount}, </if>
+			<if test="startActId != null">`START_ACT_ID_` = #{startActId}, </if>
+			<if test="callbackId != null">`CALLBACK_ID_` = #{callbackId}, </if>
+			<if test="callbackType != null">`CALLBACK_TYPE_` = #{callbackType}</if>
+		</set>
+		where ID_ = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from ACT_RU_EXECUTION where ID_ = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from ACT_RU_EXECUTION where ID_ in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

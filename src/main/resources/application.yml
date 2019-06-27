@@ -1,0 +1,33 @@
+server:
+  session-timeout: 1800
+spring:
+  thymeleaf:
+    mode: HTML
+    cache: false
+  jackson:
+    time-zone: GMT+8
+    date-format: yyyy-MM-dd HH:mm:ss
+  profiles:
+    active: develop
+  servlet:
+    multipart:
+      max-file-size: 30Mb
+      max-request-size: 30Mb
+  cache:
+    type: ehcache
+    ehcache:
+      config: config/ehcache.xml
+  mandatory-file-encoding: utf-8
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+    variables:
+       blobType:
+           BLOB
+       prefix:
+           ""
+  mapper-locations: mybatis/**/*.xml
+  typeAliasesPackage: com.bootdo.**.domain
+jasypt:
+  encryptor:
+    password: J3l9oryQmwYk60H1h28VdzceDqbCZ5sifPAnkOLuSUvKWBXCag47M

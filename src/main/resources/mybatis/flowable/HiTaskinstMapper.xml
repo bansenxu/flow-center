@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bootdo.modules.flowable.dao.HiTaskinstDao">
+
+	<select id="get" resultType="com.bootdo.modules.flowable.domain.HiTaskinstDO">
+		select `ID_`,`PROC_DEF_ID_`,`TASK_DEF_KEY_`,`PROC_INST_ID_`,`EXECUTION_ID_`,`NAME_`,`PARENT_TASK_ID_`,`DESCRIPTION_`,`OWNER_`,`ASSIGNEE_`,`START_TIME_`,`CLAIM_TIME_`,`END_TIME_`,`DURATION_`,`DELETE_REASON_`,`PRIORITY_`,`DUE_DATE_`,`FORM_KEY_`,`CATEGORY_`,`TENANT_ID_`,`REV_`,`LAST_UPDATED_TIME_`,`SCOPE_ID_`,`SUB_SCOPE_ID_`,`SCOPE_TYPE_`,`SCOPE_DEFINITION_ID_`,`TASK_DEF_ID_` from ACT_HI_TASKINST where ID_ = #{value}
+	</select>
+
+	<select id="list" resultType="java.util.Map">
+		SELECT
+			t.ID_,
+            t.PROC_DEF_ID_,
+            ap.category_,
+			t.PROC_INST_ID_,
+			t.NAME_,
+			t.START_TIME_,
+			t.END_TIME_,
+			t.DURATION_,
+			ac.NAME AS category_name_,
+		CASE
+		WHEN ahp.END_TIME_ IS NULL THEN
+		0 ELSE 1
+		END AS task_flag
+		FROM
+		ACT_HI_TASKINST t
+		LEFT JOIN ACT_RE_PROCDEF ap ON ap.id_ = t.proc_def_id_
+		LEFT JOIN act_de_category ac ON ac.CODE = ap.category_
+		LEFT JOIN ACT_HI_PROCINST ahp ON ahp.PROC_INST_ID_ = t.PROC_INST_ID_
+		WHERE
+		t.END_TIME_ IS NOT NULL
+		AND t.ASSIGNEE_ =  #{userId}
+		order by t.ID_ desc
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*)
+		FROM
+		ACT_HI_TASKINST t
+		LEFT JOIN ACT_RE_PROCDEF ap ON ap.id_ = t.proc_def_id_
+		LEFT JOIN act_de_category ac ON ac.CODE = ap.category_
+		LEFT JOIN ACT_HI_PROCINST ahp ON ahp.PROC_INST_ID_ = t.PROC_INST_ID_
+		WHERE
+		t.END_TIME_ IS NOT NULL
+		AND t.ASSIGNEE_ =  #{userId}
+	</select>
+	 
+	<insert id="save" parameterType="com.bootdo.modules.flowable.domain.HiTaskinstDO">
+		insert into ACT_HI_TASKINST
+		(
+			`ID_`, 
+			`PROC_DEF_ID_`, 
+			`TASK_DEF_KEY_`, 
+			`PROC_INST_ID_`, 
+			`EXECUTION_ID_`, 
+			`NAME_`, 
+			`PARENT_TASK_ID_`, 
+			`DESCRIPTION_`, 
+			`OWNER_`, 
+			`ASSIGNEE_`, 
+			`START_TIME_`, 
+			`CLAIM_TIME_`, 
+			`END_TIME_`, 
+			`DURATION_`, 
+			`DELETE_REASON_`, 
+			`PRIORITY_`, 
+			`DUE_DATE_`, 
+			`FORM_KEY_`, 
+			`CATEGORY_`, 
+			`TENANT_ID_`, 
+			`REV_`, 
+			`LAST_UPDATED_TIME_`, 
+			`SCOPE_ID_`, 
+			`SUB_SCOPE_ID_`, 
+			`SCOPE_TYPE_`, 
+			`SCOPE_DEFINITION_ID_`, 
+			`TASK_DEF_ID_`
+		)
+		values
+		(
+			#{id}, 
+			#{procDefId}, 
+			#{taskDefKey}, 
+			#{procInstId}, 
+			#{executionId}, 
+			#{name}, 
+			#{parentTaskId}, 
+			#{description}, 
+			#{owner}, 
+			#{assignee}, 
+			#{startTime}, 
+			#{claimTime}, 
+			#{endTime}, 
+			#{duration}, 
+			#{deleteReason}, 
+			#{priority}, 
+			#{dueDate}, 
+			#{formKey}, 
+			#{category}, 
+			#{tenantId}, 
+			#{rev}, 
+			#{lastUpdatedTime}, 
+			#{scopeId}, 
+			#{subScopeId}, 
+			#{scopeType}, 
+			#{scopeDefinitionId}, 
+			#{taskDefId}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.bootdo.modules.flowable.domain.HiTaskinstDO">
+		update ACT_HI_TASKINST 
+		<set>
+			<if test="procDefId != null">`PROC_DEF_ID_` = #{procDefId}, </if>
+			<if test="taskDefKey != null">`TASK_DEF_KEY_` = #{taskDefKey}, </if>
+			<if test="procInstId != null">`PROC_INST_ID_` = #{procInstId}, </if>
+			<if test="executionId != null">`EXECUTION_ID_` = #{executionId}, </if>
+			<if test="name != null">`NAME_` = #{name}, </if>
+			<if test="parentTaskId != null">`PARENT_TASK_ID_` = #{parentTaskId}, </if>
+			<if test="description != null">`DESCRIPTION_` = #{description}, </if>
+			<if test="owner != null">`OWNER_` = #{owner}, </if>
+			<if test="assignee != null">`ASSIGNEE_` = #{assignee}, </if>
+			<if test="startTime != null">`START_TIME_` = #{startTime}, </if>
+			<if test="claimTime != null">`CLAIM_TIME_` = #{claimTime}, </if>
+			<if test="endTime != null">`END_TIME_` = #{endTime}, </if>
+			<if test="duration != null">`DURATION_` = #{duration}, </if>
+			<if test="deleteReason != null">`DELETE_REASON_` = #{deleteReason}, </if>
+			<if test="priority != null">`PRIORITY_` = #{priority}, </if>
+			<if test="dueDate != null">`DUE_DATE_` = #{dueDate}, </if>
+			<if test="formKey != null">`FORM_KEY_` = #{formKey}, </if>
+			<if test="category != null">`CATEGORY_` = #{category}, </if>
+			<if test="tenantId != null">`TENANT_ID_` = #{tenantId}, </if>
+			<if test="rev != null">`REV_` = #{rev}, </if>
+			<if test="lastUpdatedTime != null">`LAST_UPDATED_TIME_` = #{lastUpdatedTime}, </if>
+			<if test="scopeId != null">`SCOPE_ID_` = #{scopeId}, </if>
+			<if test="subScopeId != null">`SUB_SCOPE_ID_` = #{subScopeId}, </if>
+			<if test="scopeType != null">`SCOPE_TYPE_` = #{scopeType}, </if>
+			<if test="scopeDefinitionId != null">`SCOPE_DEFINITION_ID_` = #{scopeDefinitionId}, </if>
+			<if test="taskDefId != null">`TASK_DEF_ID_` = #{taskDefId}</if>
+		</set>
+		where ID_ = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from ACT_HI_TASKINST where ID_ = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from ACT_HI_TASKINST where ID_ in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

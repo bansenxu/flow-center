@@ -1,0 +1,155 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bootdo.modules.flowable.dao.ReProcdefDao">
+
+	<select id="get" resultType="com.bootdo.modules.flowable.domain.ReProcdefDO">
+		select `ID_`,`REV_`,`CATEGORY_`,`NAME_`,`KEY_`,`VERSION_`,`DEPLOYMENT_ID_`,`RESOURCE_NAME_`,`DGRM_RESOURCE_NAME_`,`DESCRIPTION_`,`HAS_START_FORM_KEY_`,`HAS_GRAPHICAL_NOTATION_`,`SUSPENSION_STATE_`,`TENANT_ID_`,`ENGINE_VERSION_`,`DERIVED_FROM_`,`DERIVED_FROM_ROOT_`,`DERIVED_VERSION_` from ACT_RE_PROCDEF where ID_ = #{value}
+	</select>
+
+	<select id="list" resultType="com.bootdo.modules.flowable.domain.ReProcdefDO">
+		select `ID_`,`REV_`,`CATEGORY_`,`NAME_`,`KEY_`,`VERSION_`,`DEPLOYMENT_ID_`,`RESOURCE_NAME_`,`DGRM_RESOURCE_NAME_`,`DESCRIPTION_`,`HAS_START_FORM_KEY_`,`HAS_GRAPHICAL_NOTATION_`,`SUSPENSION_STATE_`,`TENANT_ID_`,`ENGINE_VERSION_`,`DERIVED_FROM_`,`DERIVED_FROM_ROOT_`,`DERIVED_VERSION_` from ACT_RE_PROCDEF
+		INNER JOIN ( SELECT CATEGORY_ as c, max(VERSION_) as v FROM ACT_RE_PROCDEF t GROUP BY CATEGORY_ ) a on a.c = CATEGORY_ and a.v = VERSION_
+		LEFT JOIN act_de_category adc on adc.code = CATEGORY_
+        <where>
+		  		  <if test="id != null and id != ''"> and ID_ = #{id} </if>
+		  		  <if test="rev != null and rev != ''"> and REV_ = #{rev} </if>
+		  		  <if test="category != null and category != ''"> and CATEGORY_ = #{category} </if>
+			      <if test="name != null and name != ''"> and NAME_ LIKE CONCAT('%','${name}','%') </if>
+			      <if test="type != null and type != ''"> and adc.code = #{type} </if>
+		  		  <if test="key != null and key != ''"> and KEY_ = #{key} </if>
+		  		  <if test="version != null and version != ''"> and VERSION_ = #{version} </if>
+		  		  <if test="deploymentId != null and deploymentId != ''"> and DEPLOYMENT_ID_ = #{deploymentId} </if>
+		  		  <if test="resourceName != null and resourceName != ''"> and RESOURCE_NAME_ = #{resourceName} </if>
+		  		  <if test="dgrmResourceName != null and dgrmResourceName != ''"> and DGRM_RESOURCE_NAME_ = #{dgrmResourceName} </if>
+		  		  <if test="description != null and description != ''"> and DESCRIPTION_ = #{description} </if>
+		  		  <if test="hasStartFormKey != null and hasStartFormKey != ''"> and HAS_START_FORM_KEY_ = #{hasStartFormKey} </if>
+		  		  <if test="hasGraphicalNotation != null and hasGraphicalNotation != ''"> and HAS_GRAPHICAL_NOTATION_ = #{hasGraphicalNotation} </if>
+		  		  <if test="suspensionState != null and suspensionState != ''"> and SUSPENSION_STATE_ = #{suspensionState} </if>
+		  		  <if test="tenantId != null and tenantId != ''"> and TENANT_ID_ = #{tenantId} </if>
+		  		  <if test="engineVersion != null and engineVersion != ''"> and ENGINE_VERSION_ = #{engineVersion} </if>
+		  		  <if test="derivedFrom != null and derivedFrom != ''"> and DERIVED_FROM_ = #{derivedFrom} </if>
+		  		  <if test="derivedFromRoot != null and derivedFromRoot != ''"> and DERIVED_FROM_ROOT_ = #{derivedFromRoot} </if>
+		  		  <if test="derivedVersion != null and derivedVersion != ''"> and DERIVED_VERSION_ = #{derivedVersion} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+			<otherwise>
+                order by ID_ desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from ACT_RE_PROCDEF
+		INNER JOIN ( SELECT CATEGORY_ as c, max(VERSION_) as v FROM ACT_RE_PROCDEF t GROUP BY CATEGORY_ ) a on a.c = CATEGORY_ and a.v = VERSION_
+		LEFT JOIN act_de_category adc on adc.code = CATEGORY_
+		<where>
+			<if test="id != null and id != ''"> and ID_ = #{id} </if>
+			<if test="rev != null and rev != ''"> and REV_ = #{rev} </if>
+			<if test="category != null and category != ''"> and CATEGORY_ = #{category} </if>
+			<if test="name != null and name != ''"> and NAME_ LIKE CONCAT('%','${name}','%') </if>
+			<if test="type != null and type != ''"> and adc.code = #{type} </if>
+			<if test="key != null and key != ''"> and KEY_ = #{key} </if>
+			<if test="version != null and version != ''"> and VERSION_ = #{version} </if>
+			<if test="deploymentId != null and deploymentId != ''"> and DEPLOYMENT_ID_ = #{deploymentId} </if>
+			<if test="resourceName != null and resourceName != ''"> and RESOURCE_NAME_ = #{resourceName} </if>
+			<if test="dgrmResourceName != null and dgrmResourceName != ''"> and DGRM_RESOURCE_NAME_ = #{dgrmResourceName} </if>
+			<if test="description != null and description != ''"> and DESCRIPTION_ = #{description} </if>
+			<if test="hasStartFormKey != null and hasStartFormKey != ''"> and HAS_START_FORM_KEY_ = #{hasStartFormKey} </if>
+			<if test="hasGraphicalNotation != null and hasGraphicalNotation != ''"> and HAS_GRAPHICAL_NOTATION_ = #{hasGraphicalNotation} </if>
+			<if test="suspensionState != null and suspensionState != ''"> and SUSPENSION_STATE_ = #{suspensionState} </if>
+			<if test="tenantId != null and tenantId != ''"> and TENANT_ID_ = #{tenantId} </if>
+			<if test="engineVersion != null and engineVersion != ''"> and ENGINE_VERSION_ = #{engineVersion} </if>
+			<if test="derivedFrom != null and derivedFrom != ''"> and DERIVED_FROM_ = #{derivedFrom} </if>
+			<if test="derivedFromRoot != null and derivedFromRoot != ''"> and DERIVED_FROM_ROOT_ = #{derivedFromRoot} </if>
+			<if test="derivedVersion != null and derivedVersion != ''"> and DERIVED_VERSION_ = #{derivedVersion} </if>
+		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.bootdo.modules.flowable.domain.ReProcdefDO">
+		insert into ACT_RE_PROCDEF
+		(
+			`ID_`, 
+			`REV_`, 
+			`CATEGORY_`, 
+			`NAME_`, 
+			`KEY_`, 
+			`VERSION_`, 
+			`DEPLOYMENT_ID_`, 
+			`RESOURCE_NAME_`, 
+			`DGRM_RESOURCE_NAME_`, 
+			`DESCRIPTION_`, 
+			`HAS_START_FORM_KEY_`, 
+			`HAS_GRAPHICAL_NOTATION_`, 
+			`SUSPENSION_STATE_`, 
+			`TENANT_ID_`, 
+			`ENGINE_VERSION_`, 
+			`DERIVED_FROM_`, 
+			`DERIVED_FROM_ROOT_`, 
+			`DERIVED_VERSION_`
+		)
+		values
+		(
+			#{id}, 
+			#{rev}, 
+			#{category}, 
+			#{name}, 
+			#{key}, 
+			#{version}, 
+			#{deploymentId}, 
+			#{resourceName}, 
+			#{dgrmResourceName}, 
+			#{description}, 
+			#{hasStartFormKey}, 
+			#{hasGraphicalNotation}, 
+			#{suspensionState}, 
+			#{tenantId}, 
+			#{engineVersion}, 
+			#{derivedFrom}, 
+			#{derivedFromRoot}, 
+			#{derivedVersion}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.bootdo.modules.flowable.domain.ReProcdefDO">
+		update ACT_RE_PROCDEF 
+		<set>
+			<if test="rev != null">`REV_` = #{rev}, </if>
+			<if test="category != null">`CATEGORY_` = #{category}, </if>
+			<if test="name != null">`NAME_` = #{name}, </if>
+			<if test="key != null">`KEY_` = #{key}, </if>
+			<if test="version != null">`VERSION_` = #{version}, </if>
+			<if test="deploymentId != null">`DEPLOYMENT_ID_` = #{deploymentId}, </if>
+			<if test="resourceName != null">`RESOURCE_NAME_` = #{resourceName}, </if>
+			<if test="dgrmResourceName != null">`DGRM_RESOURCE_NAME_` = #{dgrmResourceName}, </if>
+			<if test="description != null">`DESCRIPTION_` = #{description}, </if>
+			<if test="hasStartFormKey != null">`HAS_START_FORM_KEY_` = #{hasStartFormKey}, </if>
+			<if test="hasGraphicalNotation != null">`HAS_GRAPHICAL_NOTATION_` = #{hasGraphicalNotation}, </if>
+			<if test="suspensionState != null">`SUSPENSION_STATE_` = #{suspensionState}, </if>
+			<if test="tenantId != null">`TENANT_ID_` = #{tenantId}, </if>
+			<if test="engineVersion != null">`ENGINE_VERSION_` = #{engineVersion}, </if>
+			<if test="derivedFrom != null">`DERIVED_FROM_` = #{derivedFrom}, </if>
+			<if test="derivedFromRoot != null">`DERIVED_FROM_ROOT_` = #{derivedFromRoot}, </if>
+			<if test="derivedVersion != null">`DERIVED_VERSION_` = #{derivedVersion}</if>
+		</set>
+		where ID_ = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from ACT_RE_PROCDEF where ID_ = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from ACT_RE_PROCDEF where ID_ in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>
