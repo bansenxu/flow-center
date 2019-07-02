@@ -1,5 +1,16 @@
 bootdo:
   uploadPath: D:/var/uploaded_files/
+  keycloak_username: admin
+  keycloak_password: admin
+  keycloak_realmname: master
+  keycloak_url: http://10.10.10.5:8080/auth
+  keycloak_client_id: admin-cli
+
+  flowable_url: jdbc:mysql://localhost:3306/workflow?useUnicode=true&characterEncoding=utf8
+  flowable_username: root
+  flowable_password: 123
+  flowable_driver_name: com.mysql.jdbc.Driver
+  
 logging:
   level:
     root: info
@@ -55,4 +66,4 @@ spring:
         # 连接池最大阻塞等待时间（使用负值表示没有限制）
         max-wait: -1
 server:
-  port: 8002
+  port: 8102

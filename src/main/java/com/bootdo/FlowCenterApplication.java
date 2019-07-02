@@ -28,6 +28,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @ComponentScan({"com.bootdo.modules.flowable", "com.bootdo","org.flowable.ui.modeler","org.flowable.ui.common"})
 public class FlowCenterApplication {
     public static void main(String[] args) {
+    	
         SpringApplication.run(FlowCenterApplication.class, args);
     }
     @Bean

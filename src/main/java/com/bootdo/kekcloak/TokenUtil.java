@@ -18,15 +18,15 @@ public class TokenUtil {
 	
 	public static void main(String[] ss)
 	{
-		getToken("admin","123456","workflow-app");
+		getToken("wangxing","123456","admin-cli","mytest");
 	}
 	
-	public static TokenDTO getToken(String username,String password,String client_id){
+	public static TokenDTO getToken(String username,String password,String client_id,String realmName){
 		 //http://127.0.0.1:8180/auth/realms/mytest/protocol/openid-connect/token
 		 /*
 		  * NameValuePair[] data = {
 		  *
-			     new NameValuePair("client_id","workflow-app"),
+			     new NameValuePair("client_id","workflow-app"), 
 			     new NameValuePair("grant_type","password"),
 			     new NameValuePair("username","wangxing"),
 			     new NameValuePair("password","123456")};
@@ -34,7 +34,7 @@ public class TokenUtil {
 		 //http://127.0.0.1:8180/auth/realms/master/protocol/openid-connect/token
 		 String result = "";
 		 try {
-			 String postURL = "http://127.0.0.1:8180/auth/realms/mytest/protocol/openid-connect/token";
+			 String postURL = "http://kc.it663.com:38000/auth/realms/"+realmName+"/protocol/openid-connect/token";
 			 PostMethod postMethod = null;
 			 postMethod = new PostMethod(postURL) ;
 			 postMethod.setRequestHeader("Accept","application/json") ;
@@ -69,7 +69,7 @@ public class TokenUtil {
 	{
 		String result = "";
 		 try {
-			 String postURL = "http://127.0.0.1:8180/auth/realms/mytest/protocol/openid-connect/token";
+			 String postURL = "http://kc.it663.com:38000/auth/realms/mytest/protocol/openid-connect/token";
 			 PostMethod postMethod = null;
 			 postMethod = new PostMethod(postURL) ;
 			 postMethod.setRequestHeader("Accept","application/json") ;
@@ -105,7 +105,7 @@ public class TokenUtil {
 		 //http://127.0.0.1:8180/auth/realms/master/protocol/openid-connect/token
 		 String result = "";
 		 try {
-			 String postURL = "http://127.0.0.1:8180/auth/realms/mytest/protocol/openid-connect/token";
+			 String postURL = "http://kc.it663.com:38000/auth/realms/mytest/protocol/openid-connect/token";
 			 PostMethod postMethod = null;
 			 postMethod = new PostMethod(postURL) ;
 			 postMethod.setRequestHeader("Accept","application/json") ;
@@ -143,7 +143,7 @@ public class TokenUtil {
 		// client_id
 		adapterConfig.setResource(user.getClientId());
 		// 认证中心keycloak地址
-		adapterConfig.setAuthServerUrl("http://127.0.0.1:8180/auth");
+		adapterConfig.setAuthServerUrl("http://kc.it663.com:38000/auth");
 		// 访问https接口时，禁用证书检查。
 		adapterConfig.setDisableTrustManager(true);
 
