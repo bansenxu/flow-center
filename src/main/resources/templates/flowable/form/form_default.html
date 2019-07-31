@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<meta charset="utf-8">
+<head th:include="include :: header"></head>
+<body class="gray-bg">
+<div class="wrapper wrapper-content ">
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="ibox float-e-margins">
+                <div class="ibox-content">
+                    <form class="form-horizontal m-t" id="signupForm">
+                        <div class="form-group">
+                            <div class="col-sm-8">
+                                <input  name="from_title" class="form-control" type="hidden" value="formKey">
+                                <input  name="from_title" class="form-control" type="hidden" value="processDefinitionKey">
+
+                                <input  name="from_value" class="form-control"  type="hidden" th:value="${formKey}" >
+                                <input  name="from_value" class="form-control" type="hidden" th:value="${processDefinitionKey}">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="col-sm-4 control-label" style="text-align: center;font-weight: bold">属性</label>
+                            <label class="col-sm-4 control-label" style="text-align: center;font-weight: bold">值</label>
+                            <div class="col-sm-4">
+                                <a onclick="addProp()" class="btn btn-info">添加属性</a>
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <div class="col-sm-4">
+                                <input  name="from_title" class="form-control" type="text">
+                            </div>
+                            <div class="col-sm-4">
+                                <input  name="from_value" class="form-control" type="text">
+                            </div>
+                            <div class="col-sm-4">
+                                <a onclick="delProp(this)" class="btn btn-danger">删除</a>
+                            </div>
+                        </div>
+
+                        <div class="form-group" id="qd">
+                            <div class="col-sm-8 col-sm-offset-3">
+                                <a onclick="save()" class="btn btn-primary">启动</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div th:include="include::footer"></div>
+<script type="text/javascript" src="/js/appjs/flowable/form/form_default.js">
+</script>
+</body>
+</html>
