@@ -4,9 +4,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import javax.sql.DataSource;
-
-import org.apache.commons.configuration.Configuration;
 import org.flowable.engine.ProcessEngine;
 import org.flowable.engine.ProcessEngineConfiguration;
 import org.flowable.engine.RepositoryService;
@@ -22,8 +19,8 @@ import org.keycloak.admin.client.resource.RealmResource;
 import org.keycloak.representations.idm.RealmRepresentation;
 import org.keycloak.representations.idm.UserRepresentation;
 
-import com.bootdo.common.config.DruidDBConfig;
-import com.bootdo.common.utils.GenUtils;
+import com.bootdo.kekcloak.service.RoleService;
+import com.bootdo.kekcloak.service.UserService;
 
 public class FlowForKeycloak implements JavaDelegate{
 	
@@ -41,12 +38,12 @@ public class FlowForKeycloak implements JavaDelegate{
 	 public static void init(String proName)
 	 {
 		 String processDefinitionKey = proName;
-		 Configuration conf = GenUtils.getKeyCloakConfig();
+		 
 		 ProcessEngineConfiguration cfg = new StandaloneProcessEngineConfiguration()
-	                .setJdbcUrl(conf.getString("flowable_url"))
-	                .setJdbcUsername(conf.getString("flowable_username"))
-	                .setJdbcPassword(conf.getString("flowable_password"))
-	                .setJdbcDriver(conf.getString("flowable_driver_name"))
+	                .setJdbcUrl("jdbc:mysql://localhost:3306/workflow?useUnicode=true&zeroDateTimeBehavior=convertToNull")
+	                .setJdbcUsername("root")
+	                .setJdbcPassword("123")
+	                .setJdbcDriver("com.mysql.jdbc.Driver")
 	                .setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_TRUE);
 
 	     ProcessEngine processEngine = cfg.buildProcessEngine();
@@ -101,7 +98,7 @@ public class FlowForKeycloak implements JavaDelegate{
 	 }
 	 
 	 public static void main(String[] args) {
-		Keycloak keycloak = Keycloak.getInstance("http://kc.it663.com:38000/auth", // keycloak地址
+		Keycloak keycloak = Keycloak.getInstance("http://localhost:8180/auth", // keycloak地址
 				"master", // 指定 Realm master
 				"admin", // 管理员账
 				"123456", // 管理员密

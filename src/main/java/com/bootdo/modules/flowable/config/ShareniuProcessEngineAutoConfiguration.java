@@ -7,10 +7,10 @@ import java.util.Set;
 
 import javax.sql.DataSource;
 
-import org.flowable.common.engine.impl.persistence.StrongUuidGenerator;
 import org.flowable.engine.impl.db.DbIdGenerator;
 import org.flowable.job.service.impl.asyncexecutor.AsyncExecutor;
 import org.flowable.spring.SpringProcessEngineConfiguration;
+import org.flowable.spring.boot.FlowableHttpProperties;
 import org.flowable.spring.boot.FlowableMailProperties;
 import org.flowable.spring.boot.FlowableProperties;
 import org.flowable.spring.boot.ProcessEngineAutoConfiguration;
@@ -20,8 +20,6 @@ import org.flowable.spring.boot.process.FlowableProcessProperties;
 import org.flowable.spring.boot.process.ProcessAsync;
 import org.flowable.spring.boot.process.ProcessAsyncHistory;
 import org.springframework.beans.factory.ObjectProvider;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
-import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -29,16 +27,17 @@ import org.springframework.transaction.PlatformTransactionManager;
 public class ShareniuProcessEngineAutoConfiguration extends ProcessEngineAutoConfiguration {
 
     public ShareniuProcessEngineAutoConfiguration(FlowableProperties flowableProperties, FlowableProcessProperties processProperties,
-                    FlowableAppProperties appProperties, FlowableIdmProperties idmProperties, FlowableMailProperties mailProperties) {
-        super(flowableProperties, processProperties, appProperties, idmProperties, mailProperties);
+                    FlowableAppProperties appProperties, FlowableIdmProperties idmProperties, 
+                    FlowableMailProperties mailProperties,FlowableHttpProperties httpProperties) {
+        super(flowableProperties, processProperties, appProperties, idmProperties, mailProperties, httpProperties);
     }
-    @Bean
+
     public SpringProcessEngineConfiguration springProcessEngineConfiguration(DataSource dataSource, PlatformTransactionManager platformTransactionManager,
             @ProcessAsync ObjectProvider<AsyncExecutor> asyncExecutorProvider, 
             @ProcessAsyncHistory ObjectProvider<AsyncExecutor> asyncHistoryExecutorProvider) throws IOException {
 
         SpringProcessEngineConfiguration conf = new SpringProcessEngineConfiguration();
-
+        conf.setDatabaseSchema("ACT");
         List<Resource> resources = this.discoverDeploymentResources(
             flowableProperties.getProcessDefinitionLocationPrefix(),
             flowableProperties.getProcessDefinitionLocationSuffixes(),

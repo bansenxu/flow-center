@@ -165,17 +165,6 @@ public class GenUtils {
             throw new BDException("获取配置文件失败，", e);
         }
     }
-    
-    /**
-     * 获取配置信息
-     */
-    public static Configuration getKeyCloakConfig() {
-        try {
-            return new PropertiesConfiguration("keycloak.properties");
-        } catch (ConfigurationException e) {
-            throw new BDException("获取配置文件失败，", e);
-        }
-    }
 
     /**
      * 获取文件名

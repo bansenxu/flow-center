@@ -18,45 +18,14 @@ public class TokenUtil {
 	
 	public static void main(String[] ss)
 	{
-		getToken("wangxing","123456","admin-cli","mytest");
+		KeyUserDO user = new KeyUserDO();
+		user.setClientId("admin-cli");
+		user.setRealmName("workflow");
+		user.setUserName("wangxing");
+		user.setPassword("123456");
+		System.out.println(getToken(user).getAccess_token());
+		//refToken(getToken(user));
 	}
-	
-	public static TokenDTO getToken(String username,String password,String client_id,String realmName){
-		 //http://127.0.0.1:8180/auth/realms/mytest/protocol/openid-connect/token
-		 /*
-		  * NameValuePair[] data = {
-		  *
-			     new NameValuePair("client_id","workflow-app"), 
-			     new NameValuePair("grant_type","password"),
-			     new NameValuePair("username","wangxing"),
-			     new NameValuePair("password","123456")};
-		  */
-		 //http://127.0.0.1:8180/auth/realms/master/protocol/openid-connect/token
-		 String result = "";
-		 try {
-			 String postURL = "http://kc.it663.com:38000/auth/realms/"+realmName+"/protocol/openid-connect/token";
-			 PostMethod postMethod = null;
-			 postMethod = new PostMethod(postURL) ;
-			 postMethod.setRequestHeader("Accept","application/json") ;
-			 postMethod.setRequestHeader("Content-Type","application/x-www-form-urlencoded") ;
-			 //参数设置，需要注意的就是里边不能传NULL，要传空字符串
-			 NameValuePair[] data = {
-			     new NameValuePair("client_id",client_id),
-			     new NameValuePair("grant_type","password"),
-			     new NameValuePair("username",username),
-			     new NameValuePair("password",password)};
-			     postMethod.setRequestBody(data);
-
-			     org.apache.commons.httpclient.HttpClient httpClient = new org.apache.commons.httpclient.HttpClient();
-			     int response = httpClient.executeMethod(postMethod); // 执行POST方法
-			     result = postMethod.getResponseBodyAsString() ;
-			     System.out.println(result);
-			     TokenDTO td = JSON.parseObject(result,TokenDTO.class);
-			     return td;
-			 } catch (Exception e) {
-			     throw new RuntimeException(e.getMessage());
-			 }
-	 }
 	
 	/*
 	 * curl -X POST -H "Content-Type: application/x-www-form-urlencoded" 
@@ -69,7 +38,7 @@ public class TokenUtil {
 	{
 		String result = "";
 		 try {
-			 String postURL = "http://kc.it663.com:38000/auth/realms/mytest/protocol/openid-connect/token";
+			 String postURL = "http://127.0.0.1:8180/auth/realms/mytest/protocol/openid-connect/token";
 			 PostMethod postMethod = null;
 			 postMethod = new PostMethod(postURL) ;
 			 postMethod.setRequestHeader("Accept","application/json") ;
@@ -105,7 +74,7 @@ public class TokenUtil {
 		 //http://127.0.0.1:8180/auth/realms/master/protocol/openid-connect/token
 		 String result = "";
 		 try {
-			 String postURL = "http://kc.it663.com:38000/auth/realms/mytest/protocol/openid-connect/token";
+			 String postURL = "http://127.0.0.1:8180/auth/realms/workflow/protocol/openid-connect/token";
 			 PostMethod postMethod = null;
 			 postMethod = new PostMethod(postURL) ;
 			 postMethod.setRequestHeader("Accept","application/json") ;
@@ -134,7 +103,7 @@ public class TokenUtil {
 	{
 		// 待验证 accessToken
 		boolean result = false;
-		String tokenString = user.getToken().getAccess_token();
+		String tokenString = TokenUtil.getToken(user).getAccess_token();
 
 		// 1、设置client配置信息
 		AdapterConfig adapterConfig = new AdapterConfig();
@@ -143,7 +112,7 @@ public class TokenUtil {
 		// client_id
 		adapterConfig.setResource(user.getClientId());
 		// 认证中心keycloak地址
-		adapterConfig.setAuthServerUrl("http://kc.it663.com:38000/auth");
+		adapterConfig.setAuthServerUrl("http://127.0.0.1:8180/auth");
 		// 访问https接口时，禁用证书检查。
 		adapterConfig.setDisableTrustManager(true);
 

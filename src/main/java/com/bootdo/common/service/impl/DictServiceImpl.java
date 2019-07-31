@@ -1,15 +1,17 @@
 package com.bootdo.common.service.impl;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import com.bootdo.common.dao.DictDao;
 import com.bootdo.common.domain.DictDO;
 import com.bootdo.common.service.DictService;
+import com.bootdo.system.domain.UserDO;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+import org.springframework.util.StringUtils;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
 
 
 @Service
@@ -67,6 +69,27 @@ public class DictServiceImpl implements DictService {
         return rString;
     }
 
+    @Override
+    public List<DictDO> getHobbyList(UserDO userDO) {
+        Map<String, Object> param = new HashMap<>(16);
+        param.put("type", "hobby");
+        List<DictDO> hobbyList = dictDao.list(param);
+
+        if (!StringUtils.isEmpty(userDO.getHobby())) {
+            String userHobbys[] = userDO.getHobby().split(";");
+            for (String userHobby : userHobbys) {
+                for (DictDO hobby : hobbyList) {
+                    if (!Objects.equals(userHobby, hobby.getId().toString())) {
+                        continue;
+                    }
+                    hobby.setRemarks("true");
+                    break;
+                }
+            }
+        }
+
+        return hobbyList;
+    }
 
     @Override
     public List<DictDO> getSexList() {

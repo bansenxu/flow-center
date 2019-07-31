@@ -1,17 +1,19 @@
 package com.bootdo.system.endpoint;
 
-import java.security.Principal;
-import java.util.List;
-
+import com.bootdo.common.annotation.Log;
+import com.bootdo.common.domain.FileDO;
+import com.bootdo.common.domain.Tree;
+import com.bootdo.common.service.FileService;
+import com.bootdo.system.domain.MenuDO;
+import com.bootdo.system.domain.UserDO;
+import com.bootdo.system.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import com.bootdo.common.annotation.Log;
-import com.bootdo.common.domain.FileDO;
-import com.bootdo.common.domain.Tree;
-import com.bootdo.common.service.FileService;
+import java.security.Principal;
+import java.util.List;
 
 /**
  * Created by IntelliJ IDEA. <br/>
@@ -23,6 +25,9 @@ import com.bootdo.common.service.FileService;
  */
 @Controller
 public class DashboardEndpoint extends AbstractEndpoint {
+
+    @Autowired
+    private MenuService menuService;
 
     @Autowired
     private FileService fileService;
@@ -51,4 +56,28 @@ public class DashboardEndpoint extends AbstractEndpoint {
     public String home() {
         return "redirect:/dashboard";
     }
+
+    @Log("请求访问主页")
+    @GetMapping(value = "dashboard")
+    public String dashboard(Model model, Principal principal) {
+
+        String username = principal.getName();
+        UserDO userDO = getUser();
+        List<Tree<MenuDO>> menus = menuService.listMenuTree(userDO.getUserId());
+        model.addAttribute("menus", menus);
+        model.addAttribute("name", username);
+        FileDO fileDO = fileService.get(userDO.getPicId());
+        if (fileDO != null && fileDO.getUrl() != null) {
+            if (fileService.isExist(fileDO.getUrl())) {
+                model.addAttribute("picUrl", fileDO.getUrl());
+            } else {
+                model.addAttribute("picUrl", "/img/photo_s.jpg");
+            }
+        } else {
+            model.addAttribute("picUrl", "/img/photo_s.jpg");
+        }
+        model.addAttribute("username", username);
+        return "dashboard";
+    }
+
 }

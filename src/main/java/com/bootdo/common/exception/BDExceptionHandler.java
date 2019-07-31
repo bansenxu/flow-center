@@ -1,9 +1,11 @@
 package com.bootdo.common.exception;
 
-import java.util.Date;
-
-import javax.servlet.http.HttpServletRequest;
-
+import com.bootdo.common.config.Constant;
+import com.bootdo.common.domain.LogDO;
+import com.bootdo.common.service.LogService;
+import com.bootdo.common.utils.HttpServletUtils;
+import com.bootdo.common.utils.R;
+import com.bootdo.system.domain.UserDO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,11 +13,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.servlet.ModelAndView;
 
-import com.bootdo.common.config.Constant;
-import com.bootdo.common.domain.LogDO;
-import com.bootdo.common.service.LogService;
-import com.bootdo.common.utils.HttpServletUtils;
-import com.bootdo.common.utils.R;
+import javax.servlet.http.HttpServletRequest;
+import java.util.Date;
 
 /**
  * 异常处理器
@@ -45,6 +44,11 @@ public class BDExceptionHandler {
         logDO.setOperation(Constant.LOG_ERROR);
         logDO.setMethod(request.getRequestURL().toString());
         logDO.setParams(e.toString());
+        UserDO current = null;
+        if (null != current) {
+            logDO.setUserId(current.getUserId());
+            logDO.setUsername(current.getUsername());
+        }
         logService.save(logDO);
         logger.error(e.getMessage(), e);
         if (HttpServletUtils.jsAjax(request)) {

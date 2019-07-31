@@ -1,22 +1,14 @@
 package com.bootdo.security;
 
+import java.util.Base64;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
-
-import org.keycloak.adapters.KeycloakDeployment;
-import org.keycloak.adapters.KeycloakDeploymentBuilder;
-import org.keycloak.adapters.rotation.AdapterTokenVerifier;
-import org.keycloak.common.VerificationException;
-import org.keycloak.representations.AccessToken;
-import org.keycloak.representations.adapters.config.AdapterConfig;
 
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
 import com.auth0.jwt.interfaces.JWTVerifier;
-import com.bootdo.kekcloak.TokenUtil;
-import com.bootdo.modules.kekcloak.KeyUserDO;
 
 public class JwtUnit {
 	
@@ -28,10 +20,48 @@ public class JwtUnit {
 	/*
 	 * token 私钥
 	 * */
-	private static final String TOKEN_SECRET = "e4013171-a621-4de7-b05f-0b07b4e6e9dd";
+	private static final String TOKEN_SECRET = "fbfc09f1-e786-45de-9675-950657a8213a";
+	
+	public static void main(String[] ss)throws Exception {
+//		KeyUserDO user = new KeyUserDO();
+//		user.setClientId("admin-cli");
+//		user.setRealmName("master");
+//		user.setUserName("wangxing");
+//		user.setPassword("123456");
+//		String token = TokenUtil.getToken(user).getAccess_token();
+//		System.out.println(verify(sign("wangxing","123456-oiu",token)));
+    	
+//    	String jwt = createJWT("wangxing", "{'a':'wx','b':123}", 1000l);
+//    	CheckResult re = validateJWT(jwt);
+//    	System.out.println(re.getErrCode());
+		
+		String jwts = sign("wangxing","123"); //签发
+		
+		String[] res = jwts.split(".");
+		System.out.println(jwts);
+		
+		String header = jwts.substring(0,jwts.indexOf("."));
+		jwts = jwts.substring(jwts.indexOf(".")+1);
+		String payload = jwts.substring(0,jwts.indexOf("."));
+		String sign = jwts.substring(jwts.indexOf(".")+1);
+		
+		System.out.println("header=="+header);
+		System.out.println("payload=="+payload);
+		System.out.println("sign=="+sign);
+		
+		System.out.println(new String(Base64.getDecoder().decode(header)));
+		System.out.println(new String(Base64.getDecoder().decode(payload)));
+		//System.out.println(Base64.decode();
+//		System.out.println(verify(jwts));//验签
+//		
+//		Thread.sleep(2500);
+//		
+//		System.out.println(verify(jwts));//验签
+	}
 
 	/*
-	 * 生成签名，15min后过期
+	 * 生成签名，2秒后过期
+	 * jwt 签发
 	 * */
 	public static String sign(String username,String userId){
 		try{
@@ -52,25 +82,19 @@ public class JwtUnit {
 		}
 	}
 	
-	public static void main(String[] ss) {
-		
-		
-	}
-
 	/*
 	 * 验签
 	 * */
-	public static boolean verify(String token){
+	public static boolean verify(String sign){
 		try{
-			token = sign("wangxing","123456-oiu");
 			Algorithm algorithm = Algorithm.HMAC256(TOKEN_SECRET);
 			JWTVerifier verifyer = JWT.require(algorithm).build();
-			DecodedJWT jwt = verifyer.verify(token);
+			DecodedJWT jwt = verifyer.verify(sign);
 			return true;
 		}catch(Exception e){
 			e.printStackTrace();
 			return false;
 		}
 	}
-
+	
 }

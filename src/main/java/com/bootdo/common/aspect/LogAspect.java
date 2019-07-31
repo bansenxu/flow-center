@@ -6,6 +6,7 @@ import com.bootdo.common.service.LogService;
 import com.bootdo.common.utils.HttpContextUtils;
 import com.bootdo.common.utils.IPUtils;
 import com.bootdo.common.utils.JSONUtils;
+import com.bootdo.system.domain.UserDO;
 import org.aspectj.lang.ProceedingJoinPoint;
 import org.aspectj.lang.annotation.Around;
 import org.aspectj.lang.annotation.Aspect;
@@ -67,8 +68,9 @@ public class LogAspect {
         HttpServletRequest request = HttpContextUtils.getHttpServletRequest();
         // 设置IP地址
         sysLog.setIp(IPUtils.getIpAddr(request));
-        
-        
+        // 用户名
+        UserDO currUser = null;//ShiroUtils.getUser();
+        if (null == currUser) {
             if (null != sysLog.getParams()) {
                 sysLog.setUserId(-1L);
                 sysLog.setUsername(sysLog.getParams());
@@ -76,7 +78,10 @@ public class LogAspect {
                 sysLog.setUserId(-1L);
                 sysLog.setUsername("获取用户信息为空");
             }
-       
+        } else {
+//            sysLog.setUserId(ShiroUtils.getUserId());
+//            sysLog.setUsername(ShiroUtils.getUser().getUsername());
+        }
         sysLog.setTime((int) time);
         // 系统当前时间
         Date date = new Date();

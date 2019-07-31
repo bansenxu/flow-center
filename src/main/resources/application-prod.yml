@@ -51,4 +51,7 @@ spring:
         # 连接池最大阻塞等待时间（使用负值表示没有限制）
         max-wait: -1
 server:
-  port: 8001
+  port: 8101
+keycloak:
+  enable: true
+  configurationFile: "classpath:keycloak-prod.json"

@@ -1,6 +1,6 @@
 package com.bootdo.modules.kekcloak;
 
-public class RoleDO{
+public class RoleDO extends BaseDO{
 	private String roleName;
 
 	public String getRoleName() {

@@ -1,8 +1,14 @@
 package com.bootdo.modules.flowable.resources;
 
-import com.bootdo.common.utils.R;
-import com.bootdo.modules.flowable.utils.InputToOutputStreamUtils;
-import org.apache.commons.io.IOUtils;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.ArrayList;
+import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+
 import org.flowable.bpmn.model.BpmnModel;
 import org.flowable.engine.HistoryService;
 import org.flowable.engine.RepositoryService;
@@ -17,13 +23,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
-import java.util.ArrayList;
-import java.util.List;
+import com.bootdo.common.utils.R;
+import com.bootdo.modules.flowable.utils.InputToOutputStreamUtils;
 
 @RestController
 @RequestMapping("/flowable/task")
@@ -83,7 +84,7 @@ public class TaskResource {
         DefaultProcessDiagramGenerator defaultProcessDiagramGenerator = new DefaultProcessDiagramGenerator();
 
 
-        InputStream in = defaultProcessDiagramGenerator.generateDiagram(bpmnModel, "PNG", highLightedActivities,false);
+        InputStream in = defaultProcessDiagramGenerator.generateDiagram(bpmnModel, "PNG", highLightedActivities, false);
 
         OutputStream out = response.getOutputStream();
         InputToOutputStreamUtils.copyPic(in, out);
@@ -122,7 +123,7 @@ public class TaskResource {
         DefaultProcessDiagramGenerator defaultProcessDiagramGenerator = new 	DefaultProcessDiagramGenerator();
 
 
-        InputStream in = defaultProcessDiagramGenerator.generateDiagram(bpmnModel, "PNG", highLightedActivities,false);
+        InputStream in = defaultProcessDiagramGenerator.generateDiagram(bpmnModel, "PNG", highLightedActivities, false);
 
         OutputStream out= response.getOutputStream();
         InputToOutputStreamUtils.copyPic(in,out);
