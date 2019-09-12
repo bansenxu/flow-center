@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:flowable="http://flowable.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.flowable.org/processdef">
+  <process id="test2" name="test2" isExecutable="true">
+    <startEvent id="startEvent1" name="开始" flowable:formFieldValidation="true"></startEvent>
+    <serviceTask id="sid-A1802EE4-0584-46F4-B112-8693CEF9E1F8" name="创建域" flowable:type="http">
+      <extensionElements>
+        <flowable:field name="requestMethod">
+          <flowable:string><![CDATA[GET]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="requestUrl">
+          <flowable:string><![CDATA[http://122.112.4.151:6080/auth/admin/realms]]></flowable:string>
+        </flowable:field>
+        <flowable:field name="requestBody">
+          <flowable:expression><![CDATA[{
+	"enabled": "true",
+	"id": "${id}",
+	"realm": "${realm}"
+}]]></flowable:expression>
+        </flowable:field>
+      </extensionElements>
+    </serviceTask>
+    <serviceTask id="sid-E5D3C985-0DF9-4377-BBBC-4E3685A0F1AE" name="插入数据库" flowable:class="com.bootdo.modules.flowable.db.SqlNode"></serviceTask>
+    <endEvent id="sid-90D1B400-F4B1-4B76-987E-307671E484A1" name="结束"></endEvent>
+    <sequenceFlow id="sid-82F96388-D55C-4FAC-B6B1-93B1E39FA094" sourceRef="startEvent1" targetRef="sid-A1802EE4-0584-46F4-B112-8693CEF9E1F8"></sequenceFlow>
+    <sequenceFlow id="sid-65D01D53-C383-4865-8AF0-63C8EFA773EC" sourceRef="sid-A1802EE4-0584-46F4-B112-8693CEF9E1F8" targetRef="sid-E5D3C985-0DF9-4377-BBBC-4E3685A0F1AE"></sequenceFlow>
+    <sequenceFlow id="sid-58C79757-2EFB-4500-8131-35A1FCFD2720" sourceRef="sid-E5D3C985-0DF9-4377-BBBC-4E3685A0F1AE" targetRef="sid-90D1B400-F4B1-4B76-987E-307671E484A1"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_test2">
+    <bpmndi:BPMNPlane bpmnElement="test2" id="BPMNPlane_test2">
+      <bpmndi:BPMNShape bpmnElement="startEvent1" id="BPMNShape_startEvent1">
+        <omgdc:Bounds height="30.0" width="30.0" x="75.0" y="162.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-A1802EE4-0584-46F4-B112-8693CEF9E1F8" id="BPMNShape_sid-A1802EE4-0584-46F4-B112-8693CEF9E1F8">
+        <omgdc:Bounds height="80.0" width="100.0" x="195.0" y="137.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-E5D3C985-0DF9-4377-BBBC-4E3685A0F1AE" id="BPMNShape_sid-E5D3C985-0DF9-4377-BBBC-4E3685A0F1AE">
+        <omgdc:Bounds height="80.0" width="100.0" x="481.5" y="137.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-90D1B400-F4B1-4B76-987E-307671E484A1" id="BPMNShape_sid-90D1B400-F4B1-4B76-987E-307671E484A1">
+        <omgdc:Bounds height="28.0" width="28.0" x="812.5" y="163.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="sid-65D01D53-C383-4865-8AF0-63C8EFA773EC" id="BPMNEdge_sid-65D01D53-C383-4865-8AF0-63C8EFA773EC">
+        <omgdi:waypoint x="294.9499999998594" y="177.0"></omgdi:waypoint>
+        <omgdi:waypoint x="481.4999999998262" y="177.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-58C79757-2EFB-4500-8131-35A1FCFD2720" id="BPMNEdge_sid-58C79757-2EFB-4500-8131-35A1FCFD2720">
+        <omgdi:waypoint x="581.45" y="177.0"></omgdi:waypoint>
+        <omgdi:waypoint x="812.5" y="177.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-82F96388-D55C-4FAC-B6B1-93B1E39FA094" id="BPMNEdge_sid-82F96388-D55C-4FAC-B6B1-93B1E39FA094">
+        <omgdi:waypoint x="104.94999923927439" y="177.0"></omgdi:waypoint>
+        <omgdi:waypoint x="194.9999999999684" y="177.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>
