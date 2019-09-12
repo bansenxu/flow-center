@@ -25,16 +25,22 @@ public class ShareniuHandlerInterceptor implements HandlerInterceptor {
         if (servletPath.endsWith(".css") || servletPath.endsWith(".js") || servletPath.endsWith(".jpg") || servletPath.endsWith(".png")) {
             return true;
         }
-        KeycloakPrincipal userDetails = (KeycloakPrincipal) SecurityContextHolder.getContext()
-                .getAuthentication()
-                .getPrincipal();
-        String username = userDetails == null ? "" : userDetails.getName();
-        LOGGER.info("ShareniuHandlerInterceptor:preHandle:username,{}", username);
-        if (servletPath.startsWith("/app")) {
-            User user = new UserEntityImpl();
-            user.setId(username);
-            SecurityUtils.assumeUser(user);
+        try{
+        	KeycloakPrincipal userDetails = (KeycloakPrincipal) SecurityContextHolder.getContext()
+                    .getAuthentication()
+                    .getPrincipal();
+            String username = userDetails == null ? "" : userDetails.getName();
+            LOGGER.info("ShareniuHandlerInterceptor:preHandle:username,{}", username);
+            if (servletPath.startsWith("/app")) {
+                User user = new UserEntityImpl();
+                user.setId(username);
+                SecurityUtils.assumeUser(user);
+            }
+        }catch(Exception e)
+        {
+        	System.out.println("keycloak 用户获取失败");
         }
+        
         return true;
     }
 

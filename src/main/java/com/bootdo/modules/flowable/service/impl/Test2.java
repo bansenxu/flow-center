@@ -27,6 +27,74 @@ public class Test2 {
     
     public static void main(String[] args)
     {
+    	//deployFlow("test2.bpmn20.xml");
+    	deployFlowPro("test2.bpmn20.xml");
+    	
+    }
+    
+    public static void deployFlow(String flowPath)
+    {
+    	/*
+    	ProcessEngineConfiguration cfg = new StandaloneProcessEngineConfiguration()
+                .setJdbcUrl("jdbc:mysql://mysql.it663.com:37101/workflow?useUnicode=true&zeroDateTimeBehavior=convertToNull")
+                .setJdbcUsername("flowable")
+                .setJdbcPassword("2C7jOaLV4RQtpl1q8D0IXuFZ9Boi3hJSsBGmeArNzYUM1PKabfWE6")
+                .setJdbcDriver("com.mysql.jdbc.Driver")
+                .setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_TRUE);
+    	*/
+    	ProcessEngineConfiguration cfg = new StandaloneProcessEngineConfiguration()
+                .setJdbcUrl("jdbc:mysql://localhost:3306/workflow?useUnicode=true&zeroDateTimeBehavior=convertToNull")
+                .setJdbcUsername("root")
+                .setJdbcPassword("123")
+                .setJdbcDriver("com.mysql.jdbc.Driver")
+                .setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_TRUE);
+
+    	ProcessEngine processEngine = cfg.buildProcessEngine();
+    	RuntimeService runtimeService = processEngine.getRuntimeService();
+
+    	RepositoryService repositoryService = processEngine.getRepositoryService();
+    	Deployment deployment = repositoryService.createDeployment()
+    	  .addClasspathResource(flowPath)
+    	  .deploy();
+    	
+    	ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
+  			  .deploymentId(deployment.getId())
+  			  .singleResult();
+    	System.out.println("Found process definition : " + processDefinition.getName());
+    }
+    
+    public static void deployFlowPro(String flowPath)
+    {
+    	ProcessEngineConfiguration cfg = new StandaloneProcessEngineConfiguration()
+                .setJdbcUrl("jdbc:mysql://122.112.4.152:3306/flowable?useUnicode=true&zeroDateTimeBehavior=convertToNull")
+                .setJdbcUsername("root")
+                .setJdbcPassword("K=?RDj7q.+7?")
+                .setJdbcDriver("com.mysql.jdbc.Driver")
+                .setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_TRUE);
+
+    	ProcessEngine processEngine = cfg.buildProcessEngine();
+    	RuntimeService runtimeService = processEngine.getRuntimeService();
+
+    	RepositoryService repositoryService = processEngine.getRepositoryService();
+    	Deployment deployment = repositoryService.createDeployment()
+    	  .addClasspathResource(flowPath)
+    	  .deploy();
+    	
+    	ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
+  			  .deploymentId(deployment.getId())
+  			  .singleResult();
+    	System.out.println("Found process definition : " + processDefinition.getName());
+    }
+    
+    public String startFlow(String flowName,String jwt){
+    	 //启动流程
+    	HashMap<String, Object> map = new HashMap<>();
+        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(flowName, map);
+        return "提交成功.流程Id为：" + processInstance.getId();
+    }
+    
+    public void temp()
+    {
 //    	Test2 t2 = new Test2();
 //    	t2.addExpense("wangxing", 123, "collect");
     	
@@ -40,30 +108,21 @@ public class Test2 {
     	ProcessEngine processEngine = cfg.buildProcessEngine();
     	RuntimeService runtimeService = processEngine.getRuntimeService();
 
+    	RepositoryService repositoryService = processEngine.getRepositoryService();
+    	Deployment deployment = repositoryService.createDeployment()
+    	  .addClasspathResource("holiday-request.bpmn20.xml")
+    	  .deploy();
+    	
+    	ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
+  			  .deploymentId(deployment.getId())
+  			  .singleResult();
+    	System.out.println("Found process definition : " + processDefinition.getName());
+  	
     	Map<String, Object> variables = new HashMap<String, Object>();
     	variables.put("employee", "wangxing");
     	variables.put("nrOfHolidays", 5);
     	variables.put("description", "Have a rest.");
     	ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("createRealm", variables);
-    	
-//    	RepositoryService repositoryService = processEngine.getRepositoryService();
-//    	Deployment deployment = repositoryService.createDeployment()
-//    	  .addClasspathResource("holiday-request.bpmn20.xml")
-//    	  .deploy();
-//
-//    	ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
-//    			  .deploymentId(deployment.getId())
-//    			  .singleResult();
-//    	System.out.println("Found process definition : " + processDefinition.getName());
-//    	
-    	
-    }
-    
-    public String startFlow(String flowName,String jwt){
-    	 //启动流程
-    	HashMap<String, Object> map = new HashMap<>();
-        ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(flowName, map);
-        return "提交成功.流程Id为：" + processInstance.getId();
     }
 
     public String addExpense(String userId, Integer money, String processDefinitionKey) {

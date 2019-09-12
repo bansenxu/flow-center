@@ -9,9 +9,12 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.jdbc.Driver
-    url: ENC(N55qN9yxOuboFtK0H+ivxApdKZrzAcVxwkFYMN7p+4rTHwRAsWd6fOETmh4SW55MWgQJh91RBhUG5TSy557lQo+/wjcb/LK3Hu0x6E2ZIUTC6GJAVuaaGDJdEV2iC1TC)
-    username: ENC(BZLHGb4UjsoE+sr6mgwCl/PhQQnOBHzL)
-    password: ENC(ZWfu/1qlvAuRo0wo1CKBTBfrd8lp38k1epajUh+qEYWwOlqv5+PKexqT9i36XCL6CzcCbQBlS3+LvMjRqY5DiQ==)
+    url: jdbc:mysql://localhost:3306/flowable?useUnicode=true&characterEncoding=utf8
+    username: root
+    password: K=?RDj7q.+7?
+    #url: ENC(N55qN9yxOuboFtK0H+ivxApdKZrzAcVxwkFYMN7p+4rTHwRAsWd6fOETmh4SW55MWgQJh91RBhUG5TSy557lQo+/wjcb/LK3Hu0x6E2ZIUTC6GJAVuaaGDJdEV2iC1TC)
+    # username: ENC(BZLHGb4UjsoE+sr6mgwCl/PhQQnOBHzL)
+    # password: ENC(ZWfu/1qlvAuRo0wo1CKBTBfrd8lp38k1epajUh+qEYWwOlqv5+PKexqT9i36XCL6CzcCbQBlS3+LvMjRqY5DiQ==)
     initialSize: 1
     minIdle: 3
     maxActive: 20
@@ -49,9 +52,7 @@ spring:
         # 连接池最大连接数（使用负值表示没有限制）
         max-active: 100
         # 连接池最大阻塞等待时间（使用负值表示没有限制）
+        
         max-wait: -1
 server:
   port: 8101
-keycloak:
-  enable: true
-  configurationFile: "classpath:keycloak-prod.json"

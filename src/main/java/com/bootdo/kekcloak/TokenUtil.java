@@ -20,8 +20,8 @@ public class TokenUtil {
 	{
 		KeyUserDO user = new KeyUserDO();
 		user.setClientId("admin-cli");
-		user.setRealmName("workflow");
-		user.setUserName("wangxing");
+		user.setRealmName("master");
+		user.setUserName("admin");
 		user.setPassword("123456");
 		System.out.println(getToken(user).getAccess_token());
 		//refToken(getToken(user));

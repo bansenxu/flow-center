@@ -56,7 +56,3 @@ spring:
         max-wait: -1
 server:
   port: 8002
-
-keycloak:
-  enable: false
-  configurationFile: "classpath:keycloak-local.json"

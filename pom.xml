@@ -5,12 +5,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>com.bootdo</groupId>
-    <artifactId>cms-server-api</artifactId>
-    <version>1.7.2</version>
+    <artifactId>flow-center</artifactId>
+    <version>1.0.0</version>
     <packaging>jar</packaging>
 
-    <name>cms-server-api</name>
-    <description>cms api project</description>
+    <name>flow-center</name>
+    <description>flow center</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -47,11 +47,14 @@
             <version>${flowable.version}</version>
         </dependency>
         
-        <!-- for test start -->
+        <!-- for ssh2 start-->
+		<dependency>
+            <groupId>ch.ethz.ganymed</groupId>
+            <artifactId>ganymed-ssh2</artifactId>
+            <version>build210</version>
+		</dependency>
+		<!-- for ssh2 end -->
 
-    
-		<!-- for test end -->
-		
         <dependency>
             <groupId>org.flowable</groupId>
             <artifactId>flowable-http</artifactId>
@@ -189,7 +192,7 @@
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.47</version>
+            <version>1.2.49</version>
         </dependency>
 
         <!--velocity代码生成使用模板 -->

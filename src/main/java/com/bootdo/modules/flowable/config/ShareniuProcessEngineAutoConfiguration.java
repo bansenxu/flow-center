@@ -20,6 +20,7 @@ import org.flowable.spring.boot.process.FlowableProcessProperties;
 import org.flowable.spring.boot.process.ProcessAsync;
 import org.flowable.spring.boot.process.ProcessAsyncHistory;
 import org.springframework.beans.factory.ObjectProvider;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.Resource;
 import org.springframework.transaction.PlatformTransactionManager;
@@ -31,7 +32,7 @@ public class ShareniuProcessEngineAutoConfiguration extends ProcessEngineAutoCon
                     FlowableMailProperties mailProperties,FlowableHttpProperties httpProperties) {
         super(flowableProperties, processProperties, appProperties, idmProperties, mailProperties, httpProperties);
     }
-
+    
     public SpringProcessEngineConfiguration springProcessEngineConfiguration(DataSource dataSource, PlatformTransactionManager platformTransactionManager,
             @ProcessAsync ObjectProvider<AsyncExecutor> asyncExecutorProvider, 
             @ProcessAsyncHistory ObjectProvider<AsyncExecutor> asyncHistoryExecutorProvider) throws IOException {
