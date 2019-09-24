@@ -2,10 +2,11 @@ package com.bootdo.modules.flowable.utils;
 
 import java.util.List;
 
+import org.flowable.bpmn.model.ext.ExtChildNode;
+import org.flowable.bpmn.model.ext.ExtModelEditor;
+
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
-import com.bootdo.modules.flowable.domain.ext.ExtChildNode;
-import com.bootdo.modules.flowable.domain.ext.ExtModelEditor;
 
 public class TransUtil {
 	

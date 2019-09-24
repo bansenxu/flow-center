@@ -27,8 +27,8 @@ public class Test2 {
     
     public static void main(String[] args)
     {
-    	//deployFlow("test2.bpmn20.xml");
-    	deployFlowPro("test2.bpmn20.xml");
+    	deployFlow("test2.bpmn20.xml");
+    	//deployFlowPro("test2.bpmn20.xml");
     	
     }
     
@@ -57,10 +57,10 @@ public class Test2 {
     	  .addClasspathResource(flowPath)
     	  .deploy();
     	
-    	ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
-  			  .deploymentId(deployment.getId())
-  			  .singleResult();
-    	System.out.println("Found process definition : " + processDefinition.getName());
+//    	ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
+//  			  .deploymentId(deployment.getId())
+//  			  .singleResult();
+//    	System.out.println("Found process definition : " + processDefinition.getName());
     }
     
     public static void deployFlowPro(String flowPath)

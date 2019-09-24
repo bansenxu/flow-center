@@ -4,8 +4,8 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
-import javax.sql.DataSource;
-
+import org.flowable.bpmn.model.ext.ExtChildNode;
+import org.flowable.bpmn.model.ext.ExtModelEditor;
 import org.flowable.engine.ProcessEngine;
 import org.flowable.engine.ProcessEngineConfiguration;
 import org.flowable.engine.RuntimeService;
@@ -23,8 +23,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONObject;
 import com.bootdo.modules.flowable.domain.DeModel;
 import com.bootdo.modules.flowable.domain.ExtDatasourceDO;
-import com.bootdo.modules.flowable.domain.ext.ExtChildNode;
-import com.bootdo.modules.flowable.domain.ext.ExtModelEditor;
 import com.bootdo.modules.flowable.service.DeModelService;
 import com.bootdo.modules.flowable.service.ExtDatasourceService;
 import com.bootdo.modules.flowable.utils.TransUtil;
@@ -44,9 +42,6 @@ public class FlowableRest {
 	
 	@Autowired
     private RuntimeService runtimeService;
-	
-	@Autowired
-	private DataSource dataSource;
 	
 	@Autowired
 	private DeModelService deModelService;
@@ -87,14 +82,13 @@ public class FlowableRest {
 		HashMap<String, Object> map = JSON.parseObject(paramString,HashMap.class);
 		map.put("flowName", flowName);
 		map.put("model", editorModel);
+		
+		map.put("header", "header:i am header");
+		map.put("body", "i am body");
 		//流程参数构建
 		//数据源
-		String dataSource_Id = getDSFromModel(editorModel);
-		if(dataSource_Id!=null)
-		{
-			ExtDatasourceDO ds =extDatasourceService.get(dataSource_Id);
-			map.put("dataSource", ds);
-		}
+		map = setDSFromModel(editorModel,map);
+
 		ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(flowName, map);
 		return "提交成功.流程Id为：" + processInstance.getId();
 		
@@ -115,25 +109,25 @@ public class FlowableRest {
 		System.out.println(new String(Base64.getDecoder().decode(header)));
 		System.out.println(new String(Base64.getDecoder().decode(payload)));
 		
-//		ProcessEngineConfiguration cfg = new StandaloneProcessEngineConfiguration()
-//                .setJdbcUrl("jdbc:mysql://localhost:3306/workflow?useUnicode=true&zeroDateTimeBehavior=convertToNull")
-//                .setJdbcUsername("root")
-//                .setJdbcPassword("123")
-//                .setJdbcDriver("com.mysql.jdbc.Driver")
-//                .setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_TRUE);
-//
-//    	ProcessEngine processEngine = cfg.buildProcessEngine();
-//    	RuntimeService runtimeService = processEngine.getRuntimeService();
-//    	
-//    	Map<String, Object> variables = new HashMap<String, Object>();
-//    	variables.put("name", "wangxing");
-//    	
-//		ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("test",variables);
-//		System.out.println("提交成功.流程Id为：" + processInstance.getId()); 
+		ProcessEngineConfiguration cfg = new StandaloneProcessEngineConfiguration()
+                .setJdbcUrl("jdbc:mysql://localhost:3306/workflow?useUnicode=true&zeroDateTimeBehavior=convertToNull")
+                .setJdbcUsername("root")
+                .setJdbcPassword("123")
+                .setJdbcDriver("com.mysql.jdbc.Driver")
+                .setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_TRUE);
+
+    	ProcessEngine processEngine = cfg.buildProcessEngine();
+    	RuntimeService runtimeService = processEngine.getRuntimeService();
+    	
+    	Map<String, Object> variables = new HashMap<String, Object>();
+    	variables.put("name", "wangxing");
+    	
+		ProcessInstance processInstance = runtimeService.startProcessInstanceByKey("test",variables);
+		System.out.println("提交成功.流程Id为：" + processInstance.getId()); 
 	}
 	
 	/*从json中获取数据源*/
-	public String getDSFromModel(ExtModelEditor editorModel)
+	public HashMap<String, Object> setDSFromModel(ExtModelEditor editorModel,HashMap<String, Object> map)
 	{
 		String dataSource_Id = null;
 		for(ExtChildNode tem:editorModel.getChildShapes())
@@ -144,11 +138,14 @@ public class FlowableRest {
 					if(tem.getProperties().getServicetaskdelegateexpression()!=null)
 					{
 						dataSource_Id = tem.getProperties().getServicetaskdelegateexpression();
+						ExtDatasourceDO ds =extDatasourceService.get(dataSource_Id);
+						System.out.println(tem.getProperties().getName()+":"+tem.getProperties().getOverrideid());
+						map.put(tem.getProperties().getOverrideid()+"-ds", ds);
 					}
 				}
 			}
 		}
-		return dataSource_Id;
+		return map;
 	}
 
 }
