@@ -24,7 +24,14 @@ public class SqlNode implements JavaDelegate{
 		
 		DBFactory dbf = new DBFactory();
     	
-		dbf.execSql((ExtDatasourceDO)map.get(execution.getCurrentActivityId()+"-ds"), sql, map);
+		try {
+			dbf.execSql((ExtDatasourceDO)map.get(execution.getCurrentActivityId()+"-ds"), sql, map);
+			execution.setVariable("ResponseStatusCode", "200");
+		} catch (Exception e) {
+			execution.setVariable("ResponseStatusCode", "500");
+			execution.setVariable("ResponseReason", e.getMessage());
+			e.printStackTrace();
+		}
 	}
 	
 	/*从json中获取sql*/

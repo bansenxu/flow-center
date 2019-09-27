@@ -82,9 +82,9 @@ public class FlowableRest {
 		HashMap<String, Object> map = JSON.parseObject(paramString,HashMap.class);
 		map.put("flowName", flowName);
 		map.put("model", editorModel);
-		
-		map.put("header", "header:i am header");
+		map.put("bearer",jwts);
 		map.put("body", "i am body");
+		
 		//流程参数构建
 		//数据源
 		map = setDSFromModel(editorModel,map);
