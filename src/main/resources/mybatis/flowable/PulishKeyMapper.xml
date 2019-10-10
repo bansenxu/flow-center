@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bootdo.modules.flowable.dao.PulishKeyDao">
+
+	<select id="get" resultType="com.bootdo.modules.flowable.domain.PulishKeyDO">
+		select `id`,`username`,`pulish_key` from keycloak_pulish_key where id = #{id}
+	</select>
+	
+	<select id="getByUserName" resultType="com.bootdo.modules.flowable.domain.PulishKeyDO">
+		select `id`,`username`,`pulish_key` from keycloak_pulish_key where username = #{username}
+	</select>
+
+	<select id="list" resultType="com.bootdo.modules.flowable.domain.PulishKeyDO">
+		select `id`,`username`,`pulish_key` from keycloak_pulish_key
+        <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="username != null and username != ''"> and username = #{username} </if>
+		  		  <if test="pulishKey != null and pulishKey != ''"> and pulish_key = #{pulishKey} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+			<otherwise>
+                order by id desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from keycloak_pulish_key
+		 <where>  
+		  		  <if test="id != null and id != ''"> and id = #{id} </if>
+		  		  <if test="username != null and username != ''"> and username = #{username} </if>
+		  		  <if test="pulishKey != null and pulishKey != ''"> and pulish_key = #{pulishKey} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.bootdo.modules.flowable.domain.PulishKeyDO">
+		insert into keycloak_pulish_key
+		(
+			`id`, 
+			`username`, 
+			`pulish_key`
+		)
+		values
+		(
+			uuid(),  
+			#{username}, 
+			#{pulishKey}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.bootdo.modules.flowable.domain.PulishKeyDO">
+		update keycloak_pulish_key 
+		<set>
+			<if test="username != null">`username` = #{username}, </if>
+			<if test="pulishKey != null">`pulish_key` = #{pulishKey}</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from keycloak_pulish_key where id = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from keycloak_pulish_key where id in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

@@ -38,6 +38,7 @@ spring:
     connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
     # 合并多个DruidDataSource的监控数据
     #useGlobalDataSourceStat: true
+
   redis:
     host: 124.193.171.213
     port: 36379
@@ -56,3 +57,17 @@ spring:
         max-wait: -1
 server:
   port: 8112
+  max-http-header-size: 1024000
+  
+flowable:
+  mail:
+    server:
+      host: smtp.qq.com
+      port: 587
+      defaultFrom: 358402521@qq.com
+      username: 358402521@qq.com
+      password: alafhuytgmaabhbd
+      useSsl: true
+keycloak:
+  publicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArNqy1DIU20Ag7OWxzwqcnKyMRE636pVNuymRkT/9ZH3UT1pm9n5OoQ6kOlTG9s9T/I4f+FOPVsK21StCUgqKxOfTXf7DCO6hsc0Uta3lzX1fQ1oudRsfwHT/9KO0jBbZ6VZsZDqoekKl7qH3dpRmwpMzyW9Hvb3JUt1OBWPnBFRXVjG4ItrkMadTJ1gtlZ1JZEoymGEWYQJ8+2+eo+N+4Ws37WTkabd+vbEYN0kHdR5LhCqG14QRNf/Ko+sN823IjvJqKgOriNWUOZFv6HozBOjic9x3uYVlwk+WwhYvwKkPyS+tPB7cBF0Nor8/F4UOfMbowhfc9eZCtJmzm8uLewIDAQAB
+  

@@ -40,9 +40,12 @@ public class ShellNode implements JavaDelegate{
 		String[] commond = getCommond(editorModel,execution.getCurrentActivityId());
 		
 		ExtDatasourceDO ds = (ExtDatasourceDO)map.get(execution.getCurrentActivityId()+"-ds");
+		execution.setVariable(execution.getCurrentActivityId()+"ResponseStatusCode", "200");
 		try {
 			executeCommond(ds,commond);
 		} catch (Exception e) {
+			execution.setVariable(execution.getCurrentActivityId()+"ResponseStatusCode", "500");
+			execution.setVariable(execution.getCurrentActivityId()+"ResponseReason", e.getMessage());
 			e.printStackTrace();
 		}
 		

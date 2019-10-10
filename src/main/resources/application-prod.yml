@@ -9,9 +9,9 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/flowable?useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://122.112.4.150:3306/workflow?useUnicode=true&characterEncoding=utf8
     username: root
-    password: K=?RDj7q.+7?
+    password: Bansenxu123abc!!!!!
     #url: ENC(N55qN9yxOuboFtK0H+ivxApdKZrzAcVxwkFYMN7p+4rTHwRAsWd6fOETmh4SW55MWgQJh91RBhUG5TSy557lQo+/wjcb/LK3Hu0x6E2ZIUTC6GJAVuaaGDJdEV2iC1TC)
     # username: ENC(BZLHGb4UjsoE+sr6mgwCl/PhQQnOBHzL)
     # password: ENC(ZWfu/1qlvAuRo0wo1CKBTBfrd8lp38k1epajUh+qEYWwOlqv5+PKexqT9i36XCL6CzcCbQBlS3+LvMjRqY5DiQ==)
@@ -56,3 +56,17 @@ spring:
         max-wait: -1
 server:
   port: 8102
+  max-http-header-size: 1024000
+  
+flowable:
+  mail:
+    server:
+      host: smtp.qq.com
+      port: 587
+      defaultFrom: 358402521@qq.com
+      username: 358402521@qq.com
+      password: alafhuytgmaabhbd
+      useSsl: true
+keycloak:
+  publicKey: MIIBIjANBgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEArNqy1DIU20Ag7OWxzwqcnKyMRE636pVNuymRkT/9ZH3UT1pm9n5OoQ6kOlTG9s9T/I4f+FOPVsK21StCUgqKxOfTXf7DCO6hsc0Uta3lzX1fQ1oudRsfwHT/9KO0jBbZ6VZsZDqoekKl7qH3dpRmwpMzyW9Hvb3JUt1OBWPnBFRXVjG4ItrkMadTJ1gtlZ1JZEoymGEWYQJ8+2+eo+N+4Ws37WTkabd+vbEYN0kHdR5LhCqG14QRNf/Ko+sN823IjvJqKgOriNWUOZFv6HozBOjic9x3uYVlwk+WwhYvwKkPyS+tPB7cBF0Nor8/F4UOfMbowhfc9eZCtJmzm8uLewIDAQAB
+  

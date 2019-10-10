@@ -26,10 +26,10 @@ public class SqlNode implements JavaDelegate{
     	
 		try {
 			dbf.execSql((ExtDatasourceDO)map.get(execution.getCurrentActivityId()+"-ds"), sql, map);
-			execution.setVariable("ResponseStatusCode", "200");
+			execution.setVariable(execution.getCurrentActivityId()+"ResponseStatusCode", "200");
 		} catch (Exception e) {
-			execution.setVariable("ResponseStatusCode", "500");
-			execution.setVariable("ResponseReason", e.getMessage());
+			execution.setVariable(execution.getCurrentActivityId()+"ResponseStatusCode", "500");
+			execution.setVariable(execution.getCurrentActivityId()+"ResponseReason", e.getMessage());
 			e.printStackTrace();
 		}
 	}
