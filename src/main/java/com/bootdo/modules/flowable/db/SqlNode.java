@@ -1,5 +1,6 @@
 package com.bootdo.modules.flowable.db;
 
+import java.util.List;
 import java.util.Map;
 
 import org.flowable.bpmn.model.ext.ExtChildNode;
@@ -25,7 +26,8 @@ public class SqlNode implements JavaDelegate{
 		DBFactory dbf = new DBFactory();
     	
 		try {
-			dbf.execSql((ExtDatasourceDO)map.get(execution.getCurrentActivityId()+"-ds"), sql, map);
+			List result = dbf.execSql((ExtDatasourceDO)map.get(execution.getCurrentActivityId()+"-ds"), sql, map);
+			execution.setVariable(execution.getCurrentActivityId()+"SelectResult", result);
 			execution.setVariable(execution.getCurrentActivityId()+"ResponseStatusCode", "200");
 		} catch (Exception e) {
 			execution.setVariable(execution.getCurrentActivityId()+"ResponseStatusCode", "500");

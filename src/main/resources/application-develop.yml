@@ -3,7 +3,7 @@ bootdo:
 logging:
   level:
     root: info
-    #    com.bootdo: debug
+    com.bootdo: debug
     com.bootdo.security: debug
     com.alibaba.druid.pool: debug
 spring:

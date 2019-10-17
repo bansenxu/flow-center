@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bootdo.modules.flowable.dao.GeByteArrayDao">
+
+  <select id="selectBytesOfByteArray" parameterType="string" resultType="org.flowable.engine.impl.persistence.entity.ByteArrayEntityImpl">
+    select b.NAME_ , b.BYTES_ from act_ge_bytearray b where b.ID_ in(
+	select a.BYTEARRAY_ID_ from act_hi_varinst a where 
+		a.PROC_INST_ID_= #{id, jdbcType=VARCHAR} and a.NAME_ like '%SelectResult%')
+  </select>
+  
+  <resultMap id="byteArrayResultMap" type="org.flowable.engine.impl.persistence.entity.ByteArrayEntityImpl">
+    <result property="name" column="NAME_" jdbcType="VARCHAR"/>
+    <result property="bytes" column="BYTES_" jdbcType="${blobType}"/>  
+  </resultMap>
+
+</mapper>

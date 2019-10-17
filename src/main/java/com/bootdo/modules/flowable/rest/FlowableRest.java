@@ -1,26 +1,28 @@
 package com.bootdo.modules.flowable.rest;
 
-import java.net.URLDecoder;
-import java.net.URLEncoder;
+import java.io.ByteArrayInputStream;
+import java.io.ObjectInputStream;
 import java.security.interfaces.RSAKey;
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.ResultSet;
+import java.sql.Statement;
+import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
+import org.apache.http.entity.ByteArrayEntity;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.flowable.bpmn.model.ext.ExtChildNode;
 import org.flowable.bpmn.model.ext.ExtModelEditor;
-import org.flowable.engine.ProcessEngine;
-import org.flowable.engine.ProcessEngineConfiguration;
 import org.flowable.engine.RuntimeService;
-import org.flowable.engine.impl.cfg.StandaloneProcessEngineConfiguration;
+import org.flowable.engine.impl.persistence.entity.ByteArrayEntityImpl;
 import org.flowable.engine.runtime.ProcessInstance;
 import org.keycloak.common.util.PemUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.boot.SpringApplication;
-import org.springframework.context.ConfigurableApplicationContext;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestHeader;
@@ -36,6 +38,7 @@ import com.bootdo.modules.flowable.domain.DeModel;
 import com.bootdo.modules.flowable.domain.ExtDatasourceDO;
 import com.bootdo.modules.flowable.service.DeModelService;
 import com.bootdo.modules.flowable.service.ExtDatasourceService;
+import com.bootdo.modules.flowable.service.GeByteArrayService;
 import com.bootdo.modules.flowable.service.PulishKeyService;
 import com.bootdo.modules.flowable.utils.TransUtil;
 
@@ -64,6 +67,9 @@ public class FlowableRest {
 	@Autowired
 	private PulishKeyService pulishKeyService;
 	
+	@Autowired
+	private GeByteArrayService geByteArrayService;
+	
 	private static Logger logger = LogManager.getLogger(FlowableRest.class.getName());
 	
 //	@Value("${keycloak.publicKey}")private String publicKey;
@@ -84,7 +90,7 @@ public class FlowableRest {
 //		System.out.println(new String(Base64.getDecoder().decode(payload)));
 		
 		//获取流程名称
-		logger.debug("Authorization====="+Authorization);
+		logger.info("Authorization====="+Authorization);
 		logger.debug("json====="+json);
 		
 //		json = URLDecoder.decode(json);
@@ -109,27 +115,30 @@ public class FlowableRest {
 		logger.debug("flowName====="+flowName);
 		logger.debug("username====="+username);
 		
+		boolean checked = false;
 		//验证JWT start
-		try
-        {
-			String publicKey = pulishKeyService.getByUserName(username).getPulishKey();
-			System.out.println("publicKey====="+publicKey);
-        	String[] parts = Authorization.split("\\.");
-            String headerJson = new String(Base64.getDecoder().decode(parts[0]));
-            JWT.require(Algorithm.RSA256((RSAKey) PemUtils.decodePublicKey(publicKey)))
-            .build().verify(Authorization);
-        }catch(Exception e)
-        {
-        	String error = e.getMessage();
-        	if(error.indexOf("The Token has expired on")>-1)
-        	{
-        		logger.error("FC-9003 token expired");
-        		throw new Exception("FC-9003 token expired");
-        	}else{
-        		logger.error(e);
-        		throw e;
-        	}
-        }
+		if(checked){
+			try
+	        {
+				String publicKey = pulishKeyService.getByUserName(username).getPulishKey();
+				System.out.println("publicKey====="+publicKey);
+	        	String[] parts = Authorization.split("\\.");
+	            String headerJson = new String(Base64.getDecoder().decode(parts[0]));
+	            JWT.require(Algorithm.RSA256((RSAKey) PemUtils.decodePublicKey(publicKey)))
+	            .build().verify(Authorization);
+	        }catch(Exception e)
+	        {
+	        	String error = e.getMessage();
+	        	if(error.indexOf("The Token has expired on")>-1)
+	        	{
+	        		logger.error("FC-9003 token expired");
+	        		throw new Exception("FC-9003 token expired");
+	        	}else{
+	        		logger.error(e);
+	        		throw e;
+	        	}
+	        }
+		}
 		//验证JWT end
 		
 		//查询流程部署json
@@ -156,9 +165,80 @@ public class FlowableRest {
 		map = setDSFromModel(editorModel,map);
 
 		ProcessInstance processInstance = runtimeService.startProcessInstanceByKey(flowName, map);
-		return "提交成功.流程Id为：" + processInstance.getId();
+		JSONObject result = (JSONObject) JSON.toJSON(processInstance.getProcessVariables());
+		
+		ByteArrayEntityImpl are = new ByteArrayEntityImpl();
+		
+		logger.debug("提交成功.流程Id为：" + processInstance.getId());
+		return getResultJson(processInstance.getId().toString());
 		
 	}
+	
+	public String getResultJson(String pid)throws Exception
+	{
+		List<ByteArrayEntityImpl>  result = geByteArrayService.selectBytesOfByteArray(pid);
+		Map<String,Object> tmp  = null;
+		ByteArrayInputStream msgContent = null;
+		List re = new ArrayList();
+		for(ByteArrayEntityImpl tem:result)
+		{
+		    ByteArrayInputStream byteInt=new ByteArrayInputStream(tem.getBytes());
+		    ObjectInputStream objInt=new ObjectInputStream(byteInt);
+		    List<ByteArrayEntity> tem_result = (List<ByteArrayEntity>)objInt.readObject();//byte[]转map
+		    
+		    tmp = new HashMap<String,Object>();
+		    tmp.put(tem.getName().replace("hist.var-", ""), tem_result);
+		    re.add(tmp);
+		}
+		return JSON.toJSONString(re);
+	}
+	
+	public String getResult(String pid)
+	{
+		Connection conn = null;
+	    try {
+			Class.forName("com.mysql.jdbc.Driver").newInstance();
+			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/workflow?useUnicode=true&characterEncoding=utf8",
+					"root", "123");
+			String sql = "select b.NAME_,b.BYTES_ from act_ge_bytearray b "
+					+ "where b.ID_ in"
+					+ "(select a.BYTEARRAY_ID_ from act_hi_varinst a "
+						+ "where a.PROC_INST_ID_='"+pid+"' "
+						+ "and a.NAME_ like '%SelectResult%')";
+			Statement st = conn.createStatement();
+			List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
+			ResultSet rs = st.executeQuery(sql);
+			Map<String,Object> temp = null; 
+			ByteArrayInputStream msgContent = null;
+			List re = new ArrayList();
+			String name = null;
+			Map<String,Object> tmp  = null;
+			while(rs.next())
+			{
+				name = rs.getString("NAME_");
+				msgContent = (ByteArrayInputStream)rs.getBinaryStream("BYTES_");
+				byte[] byte_data = new byte[msgContent.available()];
+			    msgContent.read(byte_data, 0,byte_data.length);
+
+			    ByteArrayInputStream byteInt=new ByteArrayInputStream(byte_data);
+			    ObjectInputStream objInt=new ObjectInputStream(byteInt);
+			    List<ByteArrayEntity> result = (List<ByteArrayEntity>)objInt.readObject();//byte[]转map
+			    
+			    tmp = new HashMap<String,Object>();
+			    tmp.put(name, result);
+			    re.add(tmp);
+			}
+			
+		    String sq = JSON.toJSONString(re);
+		    System.err.println(sq);
+		    return sq;
+		} catch (Exception e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	    return null;
+	}
+
 	
 	public static void main(String[] ss)
 	{
