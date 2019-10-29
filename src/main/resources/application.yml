@@ -8,8 +8,8 @@ spring:
     time-zone: GMT+8
     date-format: yyyy-MM-dd HH:mm:ss
   profiles:
-    active: develop
-    #active: prod
+    #active: develop
+    active: prod
   servlet:
     multipart:
       max-file-size: 30Mb

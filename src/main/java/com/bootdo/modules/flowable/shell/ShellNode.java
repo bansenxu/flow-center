@@ -7,6 +7,8 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.flowable.bpmn.model.ext.ExtChildNode;
 import org.flowable.bpmn.model.ext.ExtModelEditor;
 import org.flowable.engine.delegate.DelegateExecution;
@@ -14,6 +16,7 @@ import org.flowable.engine.delegate.JavaDelegate;
 import org.springframework.stereotype.Component;
 
 import com.bootdo.modules.flowable.domain.ExtDatasourceDO;
+import com.bootdo.modules.flowable.rest.FlowableRest;
 
 import ch.ethz.ssh2.ChannelCondition;
 import ch.ethz.ssh2.Connection;
@@ -28,21 +31,25 @@ public class ShellNode implements JavaDelegate{
 	
 	private static final int TIME_OUT = 1000 * 5 * 60;
 	
+	private static Logger logger = LogManager.getLogger(ShellNode.class.getName());
+	
 	@Override
 	public void execute(DelegateExecution execution) {
 		
 
 		// TODO Auto-generated method stub
 		Map<String, Object> map = execution.getVariables();
-
+		String result = "";
+		
 		ExtModelEditor editorModel = (ExtModelEditor)map.get("model");
 		
 		String[] commond = getCommond(editorModel,execution.getCurrentActivityId());
 		
 		ExtDatasourceDO ds = (ExtDatasourceDO)map.get(execution.getCurrentActivityId()+"-ds");
-		execution.setVariable(execution.getCurrentActivityId()+"ResponseStatusCode", "200");
 		try {
-			executeCommond(ds,commond);
+			result = executeCommond(ds,commond);
+			execution.setVariable(execution.getCurrentActivityId()+"ResponseStatusCode", "200");
+			execution.setVariable(execution.getCurrentActivityId()+"ShellNodeResult", result);
 		} catch (Exception e) {
 			execution.setVariable(execution.getCurrentActivityId()+"ResponseStatusCode", "500");
 			execution.setVariable(execution.getCurrentActivityId()+"ResponseReason", e.getMessage());
@@ -51,9 +58,9 @@ public class ShellNode implements JavaDelegate{
 		
 	}
 	
-	public boolean executeCommond(ExtDatasourceDO ds,String[] commonds)throws Exception
+	public String executeCommond(ExtDatasourceDO ds,String[] commonds)throws Exception
 	{
-		boolean bl = false;
+		String result = "";
 		if(ds==null){
 			throw new Exception("目标服务器未获取成功");
 		}
@@ -66,12 +73,11 @@ public class ShellNode implements JavaDelegate{
 		Connection connection = login(ip, username, password);
 		for(String command:commonds)
 		{
-			execmd(connection, command);
+			result = execmd(connection, command);
 		}
 		connection.close();
 		
-		bl = true;
-		return bl;
+		return result;
 	}
 	
 	public static void main(String[] ss)
@@ -109,11 +115,11 @@ public class ShellNode implements JavaDelegate{
 			connection.connect();// 连接
 			flag = connection.authenticateWithPassword(username, password);// 认证
 			if (flag) {
-				System.out.println("================登录成功==================");
+				logger.info("================登录成功==================");
 				return connection;
 			}
 		} catch (IOException e) {
-			System.out.println("=========登录失败=========" + e);
+			logger.error("=========登录失败=========" + e);
 			connection.close();
 		}
 		return connection;
@@ -153,17 +159,18 @@ public class ShellNode implements JavaDelegate{
 				stdOut = new StreamGobbler(session.getStdout());
 				outStr = processStream(stdOut, DEFAULTCHART);
 //				LOG.info("caijl:[INFO] outStr=" + outStr);
-				System.out.println(outStr);
+				result = outStr;
+				logger.info("shell command out:"+outStr);
 				stdErr = new StreamGobbler(session.getStderr());
 				outErr = processStream(stdErr, DEFAULTCHART);
 //				LOG.info("caijl:[INFO] outErr=" + outErr);
-				System.out.println(outErr);
+				logger.info("shell command error:"+outErr);
 				session.waitForCondition(ChannelCondition.EXIT_STATUS, TIME_OUT);
 				ret = session.getExitStatus();
 				session.close();
 			}
 		} catch (IOException e) {
-			System.out.println("执行命令失败,链接conn:" + connection + ",执行的命令：" + cmd + "  " + e);
+			logger.error("执行命令失败,链接conn:" + connection + ",执行的命令：" + cmd + "  " + e);
 			e.printStackTrace();
 		}
 		return result;
@@ -200,10 +207,10 @@ public class ShellNode implements JavaDelegate{
 			}
 			br.close();
 		} catch (UnsupportedEncodingException e) {
-			System.out.println("解析脚本出错：" + e.getMessage());
+			logger.error("解析脚本出错：" + e.getMessage());
 			e.printStackTrace();
 		} catch (IOException e) {
-			System.out.println("解析脚本出错：" + e.getMessage());
+			logger.error("解析脚本出错：" + e.getMessage());
 			e.printStackTrace();
 		}
 		return buffer.toString();

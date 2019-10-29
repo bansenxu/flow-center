@@ -36,9 +36,11 @@ import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.bootdo.modules.flowable.domain.DeModel;
 import com.bootdo.modules.flowable.domain.ExtDatasourceDO;
+import com.bootdo.modules.flowable.domain.HiVarInstDO;
 import com.bootdo.modules.flowable.service.DeModelService;
 import com.bootdo.modules.flowable.service.ExtDatasourceService;
 import com.bootdo.modules.flowable.service.GeByteArrayService;
+import com.bootdo.modules.flowable.service.HiVarInstService;
 import com.bootdo.modules.flowable.service.PulishKeyService;
 import com.bootdo.modules.flowable.utils.TransUtil;
 
@@ -69,6 +71,9 @@ public class FlowableRest {
 	
 	@Autowired
 	private GeByteArrayService geByteArrayService;
+	
+	@Autowired
+	private HiVarInstService hiVarInstService;
 	
 	private static Logger logger = LogManager.getLogger(FlowableRest.class.getName());
 	
@@ -177,6 +182,7 @@ public class FlowableRest {
 	public String getResultJson(String pid)throws Exception
 	{
 		List<ByteArrayEntityImpl>  result = geByteArrayService.selectBytesOfByteArray(pid);
+		List<HiVarInstDO> result2 = hiVarInstService.selectHiVarInst(pid);
 		Map<String,Object> tmp  = null;
 		ByteArrayInputStream msgContent = null;
 		List re = new ArrayList();
@@ -188,6 +194,12 @@ public class FlowableRest {
 		    
 		    tmp = new HashMap<String,Object>();
 		    tmp.put(tem.getName().replace("hist.var-", ""), tem_result);
+		    re.add(tmp);
+		}
+		for(HiVarInstDO tem:result2)
+		{
+			tmp = new HashMap<String,Object>();
+		    tmp.put(tem.getName().replace("hist.var-", ""), tem.getText().replace("\u0000", ""));
 		    re.add(tmp);
 		}
 		return JSON.toJSONString(re);
