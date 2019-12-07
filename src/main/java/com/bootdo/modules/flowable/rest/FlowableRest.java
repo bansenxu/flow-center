@@ -18,9 +18,14 @@ import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.flowable.bpmn.model.ext.ExtChildNode;
 import org.flowable.bpmn.model.ext.ExtModelEditor;
+import org.flowable.engine.ProcessEngine;
+import org.flowable.engine.ProcessEngineConfiguration;
 import org.flowable.engine.RuntimeService;
+import org.flowable.engine.TaskService;
+import org.flowable.engine.impl.cfg.StandaloneProcessEngineConfiguration;
 import org.flowable.engine.impl.persistence.entity.ByteArrayEntityImpl;
 import org.flowable.engine.runtime.ProcessInstance;
+import org.flowable.task.api.Task;
 import org.keycloak.common.util.PemUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -267,15 +272,34 @@ public class FlowableRest {
 //		System.out.println(new String(Base64.getDecoder().decode(header)));
 //		System.out.println(new String(Base64.getDecoder().decode(payload)));
 //		
-//		ProcessEngineConfiguration cfg = new StandaloneProcessEngineConfiguration()
-//                .setJdbcUrl("jdbc:mysql://localhost:3306/workflow?useUnicode=true&zeroDateTimeBehavior=convertToNull")
-//                .setJdbcUsername("root")
-//                .setJdbcPassword("123")
-//                .setJdbcDriver("com.mysql.jdbc.Driver")
-//                .setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_TRUE);
-//
-//    	ProcessEngine processEngine = cfg.buildProcessEngine();
-//    	RuntimeService runtimeService = processEngine.getRuntimeService();
+		ProcessEngineConfiguration cfg = new StandaloneProcessEngineConfiguration()
+                .setJdbcUrl("jdbc:mysql://localhost:3306/workflow?useUnicode=true&zeroDateTimeBehavior=convertToNull")
+                .setJdbcUsername("root")
+                .setJdbcPassword("123")
+                .setJdbcDriver("com.mysql.jdbc.Driver")
+                .setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_TRUE);
+
+    	ProcessEngine processEngine = cfg.buildProcessEngine();
+    	RuntimeService runtimeService = processEngine.getRuntimeService();
+    	
+    	TaskService taskService = processEngine.getTaskService();
+    	List<Task> tasks = taskService.createTaskQuery().taskAssignee("admin").list();
+    	//List<Task> tasks = taskService.createTaskQuery().taskCandidateGroup("managers").list();
+    	System.out.println("You have " + tasks.size() + " tasks:");
+    	for (int i=0; i<tasks.size(); i++) {
+    	    System.out.println((i+1) + ") " + tasks.get(i).getName());
+    	}
+
+    	Task task = tasks.get(3);
+    	Map<String, Object> processVariables = taskService.getVariables(task.getId());
+    	Map variables = new HashMap<String, Object>(); 
+    	variables.put("approve", true); 
+    	taskService.complete(task.getId(), variables);
+
+    	
+    	System.out.println(processVariables.get("approve") + " wants " +
+    	        processVariables.get("nrOfHolidays") + " of holidays. Do you approve this?");
+    	
 //    	
 //    	Map<String, Object> variables = new HashMap<String, Object>();
 //    	variables.put("name", "wangxing");

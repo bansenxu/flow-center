@@ -13,6 +13,7 @@ import org.flowable.bpmn.model.ext.ExtChildNode;
 import org.flowable.bpmn.model.ext.ExtModelEditor;
 import org.flowable.engine.delegate.DelegateExecution;
 import org.flowable.engine.delegate.JavaDelegate;
+import org.flowable.http.bpmn.util.VarReplaceUtil;
 import org.springframework.stereotype.Component;
 
 import com.bootdo.modules.flowable.domain.ExtDatasourceDO;
@@ -44,15 +45,26 @@ public class ShellNode implements JavaDelegate{
 		ExtModelEditor editorModel = (ExtModelEditor)map.get("model");
 		
 		String[] commond = getCommond(editorModel,execution.getCurrentActivityId());
+		if(commond!=null)
+		{
+			for(int i=0;i<commond.length;i++){
+				commond[i] = VarReplaceUtil.replace_var(commond[i],execution.getVariables());
+				logger.debug("shell node will be excute commond:"+commond[i]);
+			}
+		}
 		
 		ExtDatasourceDO ds = (ExtDatasourceDO)map.get(execution.getCurrentActivityId()+"-ds");
 		try {
 			result = executeCommond(ds,commond);
 			execution.setVariable(execution.getCurrentActivityId()+"ResponseStatusCode", "200");
 			execution.setVariable(execution.getCurrentActivityId()+"ShellNodeResult", result);
+			logger.debug(execution.getCurrentActivityId()+"ResponseStatusCode", "200");
+			logger.debug(execution.getCurrentActivityId()+"ShellNodeResult", result);
 		} catch (Exception e) {
 			execution.setVariable(execution.getCurrentActivityId()+"ResponseStatusCode", "500");
 			execution.setVariable(execution.getCurrentActivityId()+"ResponseReason", e.getMessage());
+			logger.error(execution.getCurrentActivityId()+"ResponseStatusCode", "500");
+			logger.error(execution.getCurrentActivityId()+"ResponseReason", e.getMessage());
 			e.printStackTrace();
 		}
 		

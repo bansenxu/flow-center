@@ -2,7 +2,7 @@ bootdo:
   uploadPath: D:/var/uploaded_files/
 logging:
   level:
-    root: info
+    root: debug
   #    com.bootdo: debug
   file: /var/log/seven-mo/flowable-service/flowable-service.log
 spring:

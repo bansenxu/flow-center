@@ -3,6 +3,8 @@ package com.bootdo.modules.flowable.db;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.flowable.bpmn.model.ext.ExtChildNode;
 import org.flowable.bpmn.model.ext.ExtModelEditor;
 import org.flowable.engine.delegate.DelegateExecution;
@@ -14,6 +16,8 @@ import com.bootdo.modules.flowable.domain.ExtDatasourceDO;
 @Component
 public class SqlNode implements JavaDelegate{
     
+	private static Logger logger = LogManager.getLogger(SqlNode.class.getName());
+	
 	@Override
 	public void execute(DelegateExecution execution) {
 		// TODO Auto-generated method stub
@@ -29,9 +33,13 @@ public class SqlNode implements JavaDelegate{
 			List result = dbf.execSql((ExtDatasourceDO)map.get(execution.getCurrentActivityId()+"-ds"), sql, map);
 			execution.setVariable(execution.getCurrentActivityId()+"SelectResult", result);
 			execution.setVariable(execution.getCurrentActivityId()+"ResponseStatusCode", "200");
+			logger.debug(execution.getCurrentActivityId()+"SelectResult", result);
+			logger.debug(execution.getCurrentActivityId()+"ResponseStatusCode", "200");
 		} catch (Exception e) {
 			execution.setVariable(execution.getCurrentActivityId()+"ResponseStatusCode", "500");
 			execution.setVariable(execution.getCurrentActivityId()+"ResponseReason", e.getMessage());
+			logger.error(execution.getCurrentActivityId()+"ResponseStatusCode", "500");
+			logger.error(execution.getCurrentActivityId()+"ResponseReason", e.getMessage());
 			e.printStackTrace();
 		}
 	}
@@ -53,6 +61,7 @@ public class SqlNode implements JavaDelegate{
 				}
 			}
 		}
+		logger.debug(activiId+" sql="+sql);
 		return sql;
 	}
 	

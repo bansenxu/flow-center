@@ -2,7 +2,7 @@ bootdo:
   uploadPath: D:/var/uploaded_files/
 logging:
   level:
-    root: info
+    root: debug
     com.bootdo: debug
     com.bootdo.security: debug
     com.alibaba.druid.pool: debug
