@@ -13,13 +13,16 @@ import java.util.List;
 import java.util.Map;
 
 import org.apache.http.entity.ByteArrayEntity;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 
 import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONArray;
 import com.bootdo.modules.flowable.domain.ExtDatasourceDO;
 import com.bootdo.modules.flowable.utils.VarReplaceUtil;
 
 public class DBFactory {
+	
+	private static Logger logger = LogManager.getLogger(DBFactory.class.getName());
 	
 	public Connection getConnection(ExtDatasourceDO ds)throws Exception{
 		Connection conn = null;
@@ -37,6 +40,7 @@ public class DBFactory {
 		
 		if(sql.indexOf("select")>-1 && sql.indexOf("insert")<0)
 		{
+			logger.debug("selectSql:"+sql);
 			ResultSet rs = st.executeQuery(sql);
 			ResultSetMetaData rsmd = rs.getMetaData();
 	        int colomn = rsmd.getColumnCount();
@@ -50,7 +54,9 @@ public class DBFactory {
 	        	list.add(temp);
 			}
 		}else{
-			st.execute(sql);
+			logger.debug("dmlSql:"+sql);
+			boolean bl = st.execute(sql);
+			logger.debug("dmlSqlResult:"+bl);
 		}
 		
 		return list;

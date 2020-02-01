@@ -31,8 +31,19 @@ public class SqlNode implements JavaDelegate{
     	
 		try {
 			List result = dbf.execSql((ExtDatasourceDO)map.get(execution.getCurrentActivityId()+"-ds"), sql, map);
-			execution.setVariable(execution.getCurrentActivityId()+"SelectResult", result);
 			execution.setVariable(execution.getCurrentActivityId()+"ResponseStatusCode", "200");
+			String resultStr = "";
+			if(result.size()==1)
+			{
+				resultStr = result.get(0).toString();
+				if(resultStr.indexOf("=")>0) {
+					resultStr = resultStr.substring(resultStr.indexOf("=")+1, resultStr.length()-1);
+				}
+				execution.setVariable(execution.getCurrentActivityId()+"SelectResult", resultStr);
+			}else
+			{
+				execution.setVariable(execution.getCurrentActivityId()+"SelectResult", result);
+			}
 			logger.debug(execution.getCurrentActivityId()+"SelectResult", result);
 			logger.debug(execution.getCurrentActivityId()+"ResponseStatusCode", "200");
 		} catch (Exception e) {

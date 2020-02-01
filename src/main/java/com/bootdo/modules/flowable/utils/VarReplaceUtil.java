@@ -9,6 +9,7 @@ public class VarReplaceUtil {
 		for(String key:param.keySet()){
 			try{
 				str = str.replace("${"+key+"}", (String)param.get(key));
+				System.out.println(key+"==========:"+(String)param.get(key)); 
 			}catch(Exception e)
 			{
 				continue;
