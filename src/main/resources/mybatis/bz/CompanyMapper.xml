@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bootdo.modules.bz.company.dao.CompanyDao">
+
+	<select id="get" resultType="com.bootdo.modules.bz.company.domain.CompanyDO">
+		select `ID`,`com_name`,`com_code`,`statue`,`com_type`,`create_date`,`edite_date`,`inv_com_code`,`validate_state` from company where ID = #{value}
+	</select>
+
+	<select id="list" resultType="com.bootdo.modules.bz.company.domain.CompanyDO">
+		select `ID`,`com_name`,`com_code`,`statue`,`com_type`,`create_date`,`edite_date`,`inv_com_code`,`validate_state` from company
+        <where>  
+		  		  <if test="id != null and id != ''"> and ID = #{id} </if>
+		  		  <if test="comName != null and comName != ''"> and com_name = #{comName} </if>
+		  		  <if test="comCode != null and comCode != ''"> and com_code = #{comCode} </if>
+		  		  <if test="statue != null and statue != ''"> and statue = #{statue} </if>
+		  		  <if test="comType != null and comType != ''"> and com_type = #{comType} </if>
+		  		  <if test="createDate != null and createDate != ''"> and create_date = #{createDate} </if>
+		  		  <if test="editeDate != null and editeDate != ''"> and edite_date = #{editeDate} </if>
+		  		  <if test="invComCode != null and invComCode != ''"> and inv_com_code = #{invComCode} </if>
+		  		  <if test="validateState != null and validateState != ''"> and validate_state = #{validateState} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+			<otherwise>
+                order by ID desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from company
+		 <where>  
+		  		  <if test="id != null and id != ''"> and ID = #{id} </if>
+		  		  <if test="comName != null and comName != ''"> and com_name = #{comName} </if>
+		  		  <if test="comCode != null and comCode != ''"> and com_code = #{comCode} </if>
+		  		  <if test="statue != null and statue != ''"> and statue = #{statue} </if>
+		  		  <if test="comType != null and comType != ''"> and com_type = #{comType} </if>
+		  		  <if test="createDate != null and createDate != ''"> and create_date = #{createDate} </if>
+		  		  <if test="editeDate != null and editeDate != ''"> and edite_date = #{editeDate} </if>
+		  		  <if test="invComCode != null and invComCode != ''"> and inv_com_code = #{invComCode} </if>
+		  		  <if test="validateState != null and validateState != ''"> and validate_state = #{validateState} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.bootdo.modules.bz.company.domain.CompanyDO">
+		insert into company
+		(
+			`ID`, 
+			`com_name`, 
+			`com_code`, 
+			`statue`, 
+			`com_type`, 
+			`create_date`, 
+			`edite_date`, 
+			`inv_com_code`, 
+			`validate_state`
+		)
+		values
+		(
+			uuid(), 
+			#{comName}, 
+			#{comCode}, 
+			'0', 
+			#{comType}, 
+			now(), 
+			null, 
+			#{invComCode}, 
+			'1'
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.bootdo.modules.bz.company.domain.CompanyDO">
+		update company 
+		<set>
+			<if test="comName != null">`com_name` = #{comName}, </if>
+			<if test="comCode != null">`com_code` = #{comCode}, </if>
+			<if test="statue != null">`statue` = #{statue}, </if>
+			<if test="comType != null">`com_type` = #{comType}, </if>
+			<if test="createDate != null">`create_date` = #{createDate}, </if>
+			<if test="editeDate != null">`edite_date` = #{editeDate}, </if>
+			<if test="invComCode != null">`inv_com_code` = #{invComCode}, </if>
+			<if test="validateState != null">`validate_state` = #{validateState}</if>
+		</set>
+		where ID = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from company where ID = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from company where ID in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

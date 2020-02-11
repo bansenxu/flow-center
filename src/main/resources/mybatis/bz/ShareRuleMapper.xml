@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bootdo.modules.bz.shareRule.dao.ShareRuleDao">
+
+	<select id="get" resultType="com.bootdo.modules.bz.shareRule.domain.ShareRuleDO">
+		select `ID`,`sale_product_id`,`rule_type`,`rule_rate`,`memo`,`validate_state`,`create_date`,`edite_date`,in_com_code from share_rule where ID = #{value}
+	</select>
+
+	<select id="list" resultType="com.bootdo.modules.bz.shareRule.domain.ShareRuleDO">
+		select `ID`,`sale_product_id`,`rule_type`,`rule_rate`,`memo`,`validate_state`,`create_date`,`edite_date`,in_com_code from share_rule
+        <where>  
+		  		  <if test="id != null and id != ''"> and ID = #{id} </if>
+		  		  <if test="saleProductId != null and saleProductId != ''"> and sale_product_id = #{saleProductId} </if>
+		  		  <if test="ruleType != null and ruleType != ''"> and rule_type = #{ruleType} </if>
+		  		  <if test="ruleRate != null and ruleRate != ''"> and rule_rate = #{ruleRate} </if>
+		  		  <if test="memo != null and memo != ''"> and memo = #{memo} </if>
+		  		  <if test="validateState != null and validateState != ''"> and validate_state = #{validateState} </if>
+		  		  <if test="createDate != null and createDate != ''"> and create_date = #{createDate} </if>
+		  		  <if test="editeDate != null and editeDate != ''"> and edite_date = #{editeDate} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+			<otherwise>
+                order by ID desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from share_rule
+		 <where>  
+		  		  <if test="id != null and id != ''"> and ID = #{id} </if>
+		  		  <if test="saleProductId != null and saleProductId != ''"> and sale_product_id = #{saleProductId} </if>
+		  		  <if test="ruleType != null and ruleType != ''"> and rule_type = #{ruleType} </if>
+		  		  <if test="ruleRate != null and ruleRate != ''"> and rule_rate = #{ruleRate} </if>
+		  		  <if test="memo != null and memo != ''"> and memo = #{memo} </if>
+		  		  <if test="validateState != null and validateState != ''"> and validate_state = #{validateState} </if>
+		  		  <if test="createDate != null and createDate != ''"> and create_date = #{createDate} </if>
+		  		  <if test="editeDate != null and editeDate != ''"> and edite_date = #{editeDate} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.bootdo.modules.bz.shareRule.domain.ShareRuleDO">
+		insert into share_rule
+		(
+			`ID`, 
+			`sale_product_id`, 
+			`rule_type`, 
+			`rule_rate`, 
+			`memo`, 
+			`validate_state`, 
+			`create_date`, 
+			`edite_date`,
+			in_com_code
+		)
+		values
+		(
+			uuid(), 
+			#{saleProductId}, 
+			#{ruleType}, 
+			#{ruleRate}, 
+			#{memo}, 
+			'1', 
+			now(), 
+			null,
+			#{inComCode}
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.bootdo.modules.bz.shareRule.domain.ShareRuleDO">
+		update share_rule 
+		<set>
+			<if test="saleProductId != null">`sale_product_id` = #{saleProductId}, </if>
+			<if test="ruleType != null">`rule_type` = #{ruleType}, </if>
+			<if test="ruleRate != null">`rule_rate` = #{ruleRate}, </if>
+			<if test="memo != null">`memo` = #{memo}, </if>
+			<if test="validateState != null">`validate_state` = #{validateState}, </if>
+			<if test="createDate != null">`create_date` = #{createDate}, </if>
+			<if test="inComCode != null">`in_com_code` = #{inComCode}, </if>
+			`edite_date` = now()
+		</set>
+		where ID = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from share_rule where ID = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from share_rule where ID in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

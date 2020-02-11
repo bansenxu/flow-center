@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bootdo.modules.bz.saleorder.dao.SaleOrderDao">
+
+	<select id="get" resultType="com.bootdo.modules.bz.saleorder.domain.SaleOrderDO">
+		select `ID`,`sale_product_id`,`buy_com_name`,`buy_com_code`,`price`,`count`,`product_code`,`produce_name`,`sum_amount`,`sale_com_name`,`sale_com_code`,`state`,`create_date`,`edite_date`,`tax_state`,`validate_state` from sale_order where ID = #{value}
+	</select>
+
+	<select id="list" resultType="com.bootdo.modules.bz.saleorder.domain.SaleOrderDO">
+		select `ID`,`sale_product_id`,`buy_com_name`,`buy_com_code`,`price`,`count`,`product_code`,`produce_name`,`sum_amount`,`sale_com_name`,`sale_com_code`,`state`,`create_date`,`edite_date`,`tax_state`,`validate_state` from sale_order
+        <where>  
+		  		  <if test="id != null and id != ''"> and ID = #{id} </if>
+		  		  <if test="saleProductId != null and saleProductId != ''"> and sale_product_id = #{saleProductId} </if>
+		  		  <if test="buyComName != null and buyComName != ''"> and buy_com_name = #{buyComName} </if>
+		  		  <if test="buyComCode != null and buyComCode != ''"> and buy_com_code = #{buyComCode} </if>
+		  		  <if test="price != null and price != ''"> and price = #{price} </if>
+		  		  <if test="count != null and count != ''"> and count = #{count} </if>
+		  		  <if test="productCode != null and productCode != ''"> and product_code = #{productCode} </if>
+		  		  <if test="produceName != null and produceName != ''"> and produce_name = #{produceName} </if>
+		  		  <if test="sumAmount != null and sumAmount != ''"> and sum_amount = #{sumAmount} </if>
+		  		  <if test="saleComName != null and saleComName != ''"> and sale_com_name = #{saleComName} </if>
+		  		  <if test="saleComCode != null and saleComCode != ''"> and sale_com_code = #{saleComCode} </if>
+		  		  <if test="state != null and state != ''"> and state = #{state} </if>
+		  		  <if test="createDate != null and createDate != ''"> and create_date = #{createDate} </if>
+		  		  <if test="editeDate != null and editeDate != ''"> and edite_date = #{editeDate} </if>
+		  		  <if test="taxState != null and taxState != ''"> and tax_state = #{taxState} </if>
+		  		  <if test="validateState != null and validateState != ''"> and validate_state = #{validateState} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+			<otherwise>
+                order by ID desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from sale_order
+		 <where>  
+		  		  <if test="id != null and id != ''"> and ID = #{id} </if>
+		  		  <if test="saleProductId != null and saleProductId != ''"> and sale_product_id = #{saleProductId} </if>
+		  		  <if test="buyComName != null and buyComName != ''"> and buy_com_name = #{buyComName} </if>
+		  		  <if test="buyComCode != null and buyComCode != ''"> and buy_com_code = #{buyComCode} </if>
+		  		  <if test="price != null and price != ''"> and price = #{price} </if>
+		  		  <if test="count != null and count != ''"> and count = #{count} </if>
+		  		  <if test="productCode != null and productCode != ''"> and product_code = #{productCode} </if>
+		  		  <if test="produceName != null and produceName != ''"> and produce_name = #{produceName} </if>
+		  		  <if test="sumAmount != null and sumAmount != ''"> and sum_amount = #{sumAmount} </if>
+		  		  <if test="saleComName != null and saleComName != ''"> and sale_com_name = #{saleComName} </if>
+		  		  <if test="saleComCode != null and saleComCode != ''"> and sale_com_code = #{saleComCode} </if>
+		  		  <if test="state != null and state != ''"> and state = #{state} </if>
+		  		  <if test="createDate != null and createDate != ''"> and create_date = #{createDate} </if>
+		  		  <if test="editeDate != null and editeDate != ''"> and edite_date = #{editeDate} </if>
+		  		  <if test="taxState != null and taxState != ''"> and tax_state = #{taxState} </if>
+		  		  <if test="validateState != null and validateState != ''"> and validate_state = #{validateState} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.bootdo.modules.bz.saleorder.domain.SaleOrderDO">
+		insert into sale_order
+		(
+			`ID`, 
+			`sale_product_id`, 
+			`buy_com_name`, 
+			`buy_com_code`, 
+			`price`, 
+			`count`, 
+			`product_code`, 
+			`produce_name`, 
+			`sum_amount`, 
+			`sale_com_name`, 
+			`sale_com_code`, 
+			`state`, 
+			`create_date`, 
+			`edite_date`, 
+			`tax_state`, 
+			`validate_state`
+		)
+		values
+		(
+			uuid(), 
+			#{saleProductId}, 
+			#{buyComName}, 
+			#{buyComCode}, 
+			#{price}, 
+			#{count}, 
+			#{productCode}, 
+			#{produceName}, 
+			#{sumAmount}, 
+			#{saleComName}, 
+			#{saleComCode}, 
+			#{state}, 
+			now(), 
+			null, 
+			#{taxState}, 
+			'1'
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.bootdo.modules.bz.saleorder.domain.SaleOrderDO">
+		update sale_order 
+		<set>
+			<if test="saleProductId != null">`sale_product_id` = #{saleProductId}, </if>
+			<if test="buyComName != null">`buy_com_name` = #{buyComName}, </if>
+			<if test="buyComCode != null">`buy_com_code` = #{buyComCode}, </if>
+			<if test="price != null">`price` = #{price}, </if>
+			<if test="count != null">`count` = #{count}, </if>
+			<if test="productCode != null">`product_code` = #{productCode}, </if>
+			<if test="produceName != null">`produce_name` = #{produceName}, </if>
+			<if test="sumAmount != null">`sum_amount` = #{sumAmount}, </if>
+			<if test="saleComName != null">`sale_com_name` = #{saleComName}, </if>
+			<if test="saleComCode != null">`sale_com_code` = #{saleComCode}, </if>
+			<if test="state != null">`state` = #{state}, </if>
+			<if test="createDate != null">`create_date` = #{createDate}, </if>
+			<if test="editeDate != null">`edite_date` = #{editeDate}, </if>
+			<if test="taxState != null">`tax_state` = #{taxState}, </if>
+			<if test="validateState != null">`validate_state` = #{validateState}</if>
+		</set>
+		where ID = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from sale_order where ID = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from sale_order where ID in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>

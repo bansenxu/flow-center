@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.bootdo.modules.bz.product.dao.ProductDao">
+
+	<select id="get" resultType="com.bootdo.modules.bz.product.domain.ProductDO">
+		select `ID`,`product_name`,`product_type`,`product_code`,`price`,`memo`,`sug_price`,`min_price`,`max_price`,`create_date`,`edite_date`,`validate_state`,`state` from product where ID = #{value}
+	</select>
+
+	<select id="list" resultType="com.bootdo.modules.bz.product.domain.ProductDO">
+		select `ID`,`product_name`,`product_type`,`product_code`,`price`,`memo`,`sug_price`,`min_price`,`max_price`,`create_date`,`edite_date`,`validate_state`,`state` from product
+        <where>  
+		  		  <if test="id != null and id != ''"> and ID = #{id} </if>
+		  		  <if test="productName != null and productName != ''"> and product_name = #{productName} </if>
+		  		  <if test="productType != null and productType != ''"> and product_type = #{productType} </if>
+		  		  <if test="productCode != null and productCode != ''"> and product_code = #{productCode} </if>
+		  		  <if test="price != null and price != ''"> and price = #{price} </if>
+		  		  <if test="memo != null and memo != ''"> and memo = #{memo} </if>
+		  		  <if test="sugPrice != null and sugPrice != ''"> and sug_price = #{sugPrice} </if>
+		  		  <if test="minPrice != null and minPrice != ''"> and min_price = #{minPrice} </if>
+		  		  <if test="maxPrice != null and maxPrice != ''"> and max_price = #{maxPrice} </if>
+		  		  <if test="createDate != null and createDate != ''"> and create_date = #{createDate} </if>
+		  		  <if test="editeDate != null and editeDate != ''"> and edite_date = #{editeDate} </if>
+		  		  <if test="validateState != null and validateState != ''"> and validate_state = #{validateState} </if>
+		  		  <if test="state != null and state != ''"> and state = #{state} </if>
+		  		</where>
+        <choose>
+            <when test="sort != null and sort.trim() != ''">
+                order by ${sort} ${order}
+            </when>
+			<otherwise>
+                order by ID desc
+			</otherwise>
+        </choose>
+		<if test="offset != null and limit != null">
+			limit #{offset}, #{limit}
+		</if>
+	</select>
+	
+ 	<select id="count" resultType="int">
+		select count(*) from product
+		 <where>  
+		  		  <if test="id != null and id != ''"> and ID = #{id} </if>
+		  		  <if test="productName != null and productName != ''"> and product_name = #{productName} </if>
+		  		  <if test="productType != null and productType != ''"> and product_type = #{productType} </if>
+		  		  <if test="productCode != null and productCode != ''"> and product_code = #{productCode} </if>
+		  		  <if test="price != null and price != ''"> and price = #{price} </if>
+		  		  <if test="memo != null and memo != ''"> and memo = #{memo} </if>
+		  		  <if test="sugPrice != null and sugPrice != ''"> and sug_price = #{sugPrice} </if>
+		  		  <if test="minPrice != null and minPrice != ''"> and min_price = #{minPrice} </if>
+		  		  <if test="maxPrice != null and maxPrice != ''"> and max_price = #{maxPrice} </if>
+		  		  <if test="createDate != null and createDate != ''"> and create_date = #{createDate} </if>
+		  		  <if test="editeDate != null and editeDate != ''"> and edite_date = #{editeDate} </if>
+		  		  <if test="validateState != null and validateState != ''"> and validate_state = #{validateState} </if>
+		  		  <if test="state != null and state != ''"> and state = #{state} </if>
+		  		</where>
+	</select>
+	 
+	<insert id="save" parameterType="com.bootdo.modules.bz.product.domain.ProductDO">
+		insert into product
+		(
+			`ID`, 
+			`product_name`, 
+			`product_type`, 
+			`product_code`, 
+			`price`, 
+			`memo`, 
+			`sug_price`, 
+			`min_price`, 
+			`max_price`, 
+			`create_date`, 
+			`edite_date`, 
+			`validate_state`, 
+			`state`
+		)
+		values
+		(
+			uuid(), 
+			#{productName}, 
+			#{productType}, 
+			#{productCode}, 
+			#{price}, 
+			#{memo}, 
+			#{sugPrice}, 
+			#{minPrice}, 
+			#{maxPrice}, 
+			now(), 
+			null, 
+			'1', 
+			'0'
+		)
+	</insert>
+	 
+	<update id="update" parameterType="com.bootdo.modules.bz.product.domain.ProductDO">
+		update product 
+		<set>
+			<if test="productName != null">`product_name` = #{productName}, </if>
+			<if test="productType != null">`product_type` = #{productType}, </if>
+			<if test="productCode != null">`product_code` = #{productCode}, </if>
+			<if test="price != null">`price` = #{price}, </if>
+			<if test="memo != null">`memo` = #{memo}, </if>
+			<if test="sugPrice != null">`sug_price` = #{sugPrice}, </if>
+			<if test="minPrice != null">`min_price` = #{minPrice}, </if>
+			<if test="maxPrice != null">`max_price` = #{maxPrice}, </if>
+			<if test="createDate != null">`create_date` = #{createDate}, </if>
+			<if test="editeDate != null">`edite_date` = #{editeDate}, </if>
+			<if test="validateState != null">`validate_state` = #{validateState}, </if>
+			<if test="state != null">`state` = #{state}</if>
+		</set>
+		where ID = #{id}
+	</update>
+	
+	<delete id="remove">
+		delete from product where ID = #{value}
+	</delete>
+	
+	<delete id="batchRemove">
+		delete from product where ID in 
+		<foreach item="id" collection="array" open="(" separator="," close=")">
+			#{id}
+		</foreach>
+	</delete>
+
+</mapper>
