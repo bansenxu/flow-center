@@ -6,12 +6,15 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.bootdo.common.utils.PageUtils;
 import com.bootdo.common.utils.Query;
@@ -27,7 +30,7 @@ import com.bootdo.modules.bz.shareRule.service.ShareRuleService;
  * @date 2019-11-20 09:43:50
  */
  
-@Controller
+@RestController
 @RequestMapping("/bz/share_rule")
 public class ShareRuleController {
 	@Autowired
@@ -39,10 +42,11 @@ public class ShareRuleController {
 	    return "bz/share_rule/share_rule";
 	}
 	
+	@CrossOrigin
 	@ResponseBody
-	@GetMapping("/list")
+	@PostMapping("/list")
 //	@RequiresPermissions("bz:rule:rule")
-	public PageUtils list(@RequestParam Map<String, Object> params){
+	public PageUtils list(@RequestBody Map<String, Object> params){
 		//查询列表数据
         Query query = new Query(params);
 		List<ShareRuleDO> ruleList = ruleService.list(query);
@@ -68,10 +72,11 @@ public class ShareRuleController {
 	/**
 	 * 保存
 	 */
+	@CrossOrigin
 	@ResponseBody
 	@PostMapping("/save")
 //	@RequiresPermissions("bz:rule:add")
-	public R save( ShareRuleDO rule){
+	public R save(@RequestBody  ShareRuleDO rule){
 		if(ruleService.save(rule)>0){
 			return R.ok();
 		}
@@ -80,10 +85,11 @@ public class ShareRuleController {
 	/**
 	 * 修改
 	 */
+	@CrossOrigin
 	@ResponseBody
-	@RequestMapping("/update")
+	@PostMapping("/update")
 //	@RequiresPermissions("bz:rule:edit")
-	public R update( ShareRuleDO rule){
+	public R update(@RequestBody  ShareRuleDO rule){
 		ruleService.update(rule);
 		return R.ok();
 	}
@@ -91,10 +97,11 @@ public class ShareRuleController {
 	/**
 	 * 删除
 	 */
-	@PostMapping( "/remove")
+	@CrossOrigin
 	@ResponseBody
+	@PostMapping( "/remove")
 //	@RequiresPermissions("bz:rule:remove")
-	public R remove( String id){
+	public R remove(@RequestParam("id") String id){
 		if(ruleService.remove(id)>0){
 		return R.ok();
 		}

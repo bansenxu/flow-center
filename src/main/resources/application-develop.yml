@@ -10,9 +10,9 @@ spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://localhost:3306/workflow?useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://122.112.4.150:3306/fw65?useUnicode=true&characterEncoding=utf8
     username: root
-    password: 123
+    password: Bansenxu123abc!!!!!
     #url: ENC(N55qN9yxOuboFtK0H+ivxApdKZrzAcVxwkFYMN7p+4rTHwRAsWd6fOETmh4SW55MWgQJh91RBhUG5TSy557lQo+/wjcb/LK3Hu0x6E2ZIUTC6GJAVuaaGDJdEV2iC1TC)
     #username: ENC(BZLHGb4UjsoE+sr6mgwCl/PhQQnOBHzL)
     #password: ENC(ZWfu/1qlvAuRo0wo1CKBTBfrd8lp38k1epajUh+qEYWwOlqv5+PKexqT9i36XCL6CzcCbQBlS3+LvMjRqY5DiQ==)

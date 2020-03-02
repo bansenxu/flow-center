@@ -10,11 +10,13 @@ import javax.sql.DataSource;
 import org.flowable.engine.impl.db.DbIdGenerator;
 import org.flowable.job.service.impl.asyncexecutor.AsyncExecutor;
 import org.flowable.spring.SpringProcessEngineConfiguration;
+import org.flowable.spring.boot.FlowableAutoDeploymentProperties;
 import org.flowable.spring.boot.FlowableHttpProperties;
 import org.flowable.spring.boot.FlowableMailProperties;
 import org.flowable.spring.boot.FlowableProperties;
 import org.flowable.spring.boot.ProcessEngineAutoConfiguration;
 import org.flowable.spring.boot.app.FlowableAppProperties;
+import org.flowable.spring.boot.eventregistry.FlowableEventRegistryProperties;
 import org.flowable.spring.boot.idm.FlowableIdmProperties;
 import org.flowable.spring.boot.process.FlowableProcessProperties;
 import org.flowable.spring.boot.process.ProcessAsync;
@@ -27,10 +29,13 @@ import org.springframework.transaction.PlatformTransactionManager;
 @Configuration
 public class ShareniuProcessEngineAutoConfiguration extends ProcessEngineAutoConfiguration {
 
-    public ShareniuProcessEngineAutoConfiguration(FlowableProperties flowableProperties, FlowableProcessProperties processProperties,
-                    FlowableAppProperties appProperties, FlowableIdmProperties idmProperties, 
-                    FlowableMailProperties mailProperties,FlowableHttpProperties httpProperties) {
-        super(flowableProperties, processProperties, appProperties, idmProperties, mailProperties, httpProperties);
+	public ShareniuProcessEngineAutoConfiguration(
+    		FlowableProperties flowableProperties, FlowableProcessProperties processProperties,
+            FlowableAppProperties appProperties, FlowableIdmProperties idmProperties, 
+            FlowableEventRegistryProperties eventProperties,FlowableMailProperties mailProperties,
+            FlowableHttpProperties httpProperties,FlowableAutoDeploymentProperties autoDeploymentProperties) {
+        super(flowableProperties, processProperties, appProperties, idmProperties,
+        		eventProperties, mailProperties, httpProperties,autoDeploymentProperties);
     }
     
     public SpringProcessEngineConfiguration springProcessEngineConfiguration(DataSource dataSource, PlatformTransactionManager platformTransactionManager,

@@ -6,12 +6,16 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.bootdo.common.utils.PageUtils;
 import com.bootdo.common.utils.Query;
@@ -29,7 +33,7 @@ import com.bootdo.modules.bz.company.service.CompanyService;
  * @date 2019-11-19 10:44:05
  */
  
-@Controller
+@RestController
 @RequestMapping("/bz/company")
 public class CompanyController {
 	@Autowired
@@ -44,10 +48,10 @@ public class CompanyController {
 	    return "bz/company/company";
 	}
 	
+	@CrossOrigin
 	@ResponseBody
-	@GetMapping("/list")
-//	@RequiresPermissions("bz:company:company")
-	public PageUtils list(@RequestParam Map<String, Object> params){
+	@PostMapping("/list")
+	public PageUtils list(@RequestBody Map<String, Object> params){
 		//查询列表数据
         Query query = new Query(params);
 		List<CompanyDO> companyList = companyService.list(query);
@@ -73,10 +77,11 @@ public class CompanyController {
 	/**
 	 * 保存
 	 */
+	@CrossOrigin
 	@ResponseBody
 	@PostMapping("/save")
 //	@RequiresPermissions("bz:company:add")
-	public R save( CompanyDO company){
+	public R save(@RequestBody CompanyDO company){
 		if(companyService.save(company)>0){
 			AccountDO account = new AccountDO();
 			account.setComCode(company.getComCode());
@@ -90,10 +95,11 @@ public class CompanyController {
 	/**
 	 * 修改
 	 */
+	@CrossOrigin
 	@ResponseBody
 	@RequestMapping("/update")
 //	@RequiresPermissions("bz:company:edit")
-	public R update( CompanyDO company){
+	public R update(@RequestBody CompanyDO company){
 		companyService.update(company);
 		return R.ok();
 	}
@@ -101,11 +107,12 @@ public class CompanyController {
 	/**
 	 * 删除
 	 */
+	@CrossOrigin
 	@PostMapping( "/remove")
 	@ResponseBody
 //	@RequiresPermissions("bz:company:remove")
-	public R remove( String id){
-		if(companyService.remove(id)>0){
+	public R remove(@RequestParam("comCode") String comCode){
+		if(companyService.remove(comCode)>0){
 		return R.ok();
 		}
 		return R.error();

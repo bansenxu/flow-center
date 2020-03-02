@@ -195,11 +195,19 @@ public class FlowableRest {
 		{
 		    ByteArrayInputStream byteInt=new ByteArrayInputStream(tem.getBytes());
 		    ObjectInputStream objInt=new ObjectInputStream(byteInt);
-		    List<ByteArrayEntity> tem_result = (List<ByteArrayEntity>)objInt.readObject();//byte[]转map
-		    
 		    tmp = new HashMap<String,Object>();
-		    tmp.put(tem.getName().replace("hist.var-", ""), tem_result);
-		    re.add(tmp);
+		    try {
+		    	List<ByteArrayEntity> tem_result = (List<ByteArrayEntity>)objInt.readObject();//byte[]转map
+			    tmp.put(tem.getName().replace("hist.var-", ""), tem_result);
+			    re.add(tmp);
+			    logger.debug(tem.getName()+" is ByteArrayEntity.");
+		    }catch(Exception e)
+		    {
+		    	logger.debug(tem.getName()+" is String.");
+		    	String tem_result = objInt.readObject().toString();//byte[]转map
+			    tmp.put(tem.getName().replace("hist.var-", ""), tem_result);
+			    re.add(tmp);
+		    }
 		}
 		for(HiVarInstDO tem:result2)
 		{
@@ -210,18 +218,18 @@ public class FlowableRest {
 		return JSON.toJSONString(re);
 	}
 	
-	public String getResult(String pid)
+	public static String getResult(String pid)
 	{
 		Connection conn = null;
 	    try {
 			Class.forName("com.mysql.jdbc.Driver").newInstance();
-			conn = DriverManager.getConnection("jdbc:mysql://localhost:3306/workflow?useUnicode=true&characterEncoding=utf8",
-					"root", "123");
+			conn = DriverManager.getConnection("jdbc:mysql://122.112.4.150:3306/workflow?useUnicode=true&characterEncoding=utf8",
+					"root", "Bansenxu123abc!!!!!");
 			String sql = "select b.NAME_,b.BYTES_ from act_ge_bytearray b "
 					+ "where b.ID_ in"
 					+ "(select a.BYTEARRAY_ID_ from act_hi_varinst a "
 						+ "where a.PROC_INST_ID_='"+pid+"' "
-						+ "and a.NAME_ like '%SelectResult%')";
+						+ "and (a.NAME_ like '%SelectResult%' or a.NAME_ like '%ResponseBody'))";
 			Statement st = conn.createStatement();
 			List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
 			ResultSet rs = st.executeQuery(sql);
@@ -239,7 +247,9 @@ public class FlowableRest {
 
 			    ByteArrayInputStream byteInt=new ByteArrayInputStream(byte_data);
 			    ObjectInputStream objInt=new ObjectInputStream(byteInt);
-			    List<ByteArrayEntity> result = (List<ByteArrayEntity>)objInt.readObject();//byte[]转map
+			    Object obj = objInt.readObject();
+			    System.out.println(obj.toString());
+			    List<String> result = (List<String>)objInt.readObject();//byte[]转map
 			    
 			    tmp = new HashMap<String,Object>();
 			    tmp.put(name, result);
@@ -259,6 +269,7 @@ public class FlowableRest {
 	
 	public static void main(String[] ss)
 	{
+		getResult("747ffdc9-4fa3-11ea-a003-52540018c639");
 //		String jwts = "Bearer eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJmYmZjMDlmMS1lNzg2LTQ1ZGUtOTY3NS05NTA2NTdhODIxM2EifQ.eyJqdGkiOiJhNjdlZTIyNC0xN2RhLTQ3YTEtYjg4NS1hYTg0YWY2MWFmNWMiLCJleHAiOjE1NjgyOTU5NTUsIm5iZiI6MCwiaWF0IjoxNTY4MjU5OTU1LCJpc3MiOiJodHRwOi8vbG9jYWxob3N0OjgxODAvYXV0aC9yZWFsbXMvd29ya2Zsb3ciLCJzdWIiOiI4ZDJjNDFmNC1mNDUwLTQ2YjItOGEzZS1kNWQ1NzgzNjg1ZWIiLCJ0eXAiOiJTZXJpYWxpemVkLUlEIiwiYXV0aF90aW1lIjowLCJzZXNzaW9uX3N0YXRlIjoiOGE2NWNhZTYtOWRlMS00ZjM2LWE5Y2QtMDI0NDQzZjIxMmNhIiwic3RhdGVfY2hlY2tlciI6IkNMbGxqTlM2NmxxZDdnZmJCWUY4MUpLbXp1dTVNajNaRE02NDJTV2dUeEkifQ.L0Ugq5R9boxNOW8XUNW0mabUkyg1K_vPHOWuB0XPNL0";
 //		jwts = jwts.substring(7);
 //		System.out.println(jwts);
@@ -272,33 +283,33 @@ public class FlowableRest {
 //		System.out.println(new String(Base64.getDecoder().decode(header)));
 //		System.out.println(new String(Base64.getDecoder().decode(payload)));
 //		
-		ProcessEngineConfiguration cfg = new StandaloneProcessEngineConfiguration()
-                .setJdbcUrl("jdbc:mysql://localhost:3306/workflow?useUnicode=true&zeroDateTimeBehavior=convertToNull")
-                .setJdbcUsername("root")
-                .setJdbcPassword("123")
-                .setJdbcDriver("com.mysql.jdbc.Driver")
-                .setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_TRUE);
+//		ProcessEngineConfiguration cfg = new StandaloneProcessEngineConfiguration()
+//                .setJdbcUrl("jdbc:mysql://localhost:3306/workflow?useUnicode=true&zeroDateTimeBehavior=convertToNull")
+//                .setJdbcUsername("root")
+//                .setJdbcPassword("123")
+//                .setJdbcDriver("com.mysql.jdbc.Driver")
+//                .setDatabaseSchemaUpdate(ProcessEngineConfiguration.DB_SCHEMA_UPDATE_TRUE);
 
-    	ProcessEngine processEngine = cfg.buildProcessEngine();
-    	RuntimeService runtimeService = processEngine.getRuntimeService();
-    	
-    	TaskService taskService = processEngine.getTaskService();
-    	List<Task> tasks = taskService.createTaskQuery().taskAssignee("admin").list();
-    	//List<Task> tasks = taskService.createTaskQuery().taskCandidateGroup("managers").list();
-    	System.out.println("You have " + tasks.size() + " tasks:");
-    	for (int i=0; i<tasks.size(); i++) {
-    	    System.out.println((i+1) + ") " + tasks.get(i).getName());
-    	}
-
-    	Task task = tasks.get(3);
-    	Map<String, Object> processVariables = taskService.getVariables(task.getId());
-    	Map variables = new HashMap<String, Object>(); 
-    	variables.put("approve", true); 
-    	taskService.complete(task.getId(), variables);
-
-    	
-    	System.out.println(processVariables.get("approve") + " wants " +
-    	        processVariables.get("nrOfHolidays") + " of holidays. Do you approve this?");
+//    	ProcessEngine processEngine = cfg.buildProcessEngine();
+//    	RuntimeService runtimeService = processEngine.getRuntimeService();
+//    	
+//    	TaskService taskService = processEngine.getTaskService();
+//    	List<Task> tasks = taskService.createTaskQuery().taskAssignee("admin").list();
+//    	//List<Task> tasks = taskService.createTaskQuery().taskCandidateGroup("managers").list();
+//    	System.out.println("You have " + tasks.size() + " tasks:");
+//    	for (int i=0; i<tasks.size(); i++) {
+//    	    System.out.println((i+1) + ") " + tasks.get(i).getName());
+//    	}
+//
+//    	Task task = tasks.get(3);
+//    	Map<String, Object> processVariables = taskService.getVariables(task.getId());
+//    	Map variables = new HashMap<String, Object>(); 
+//    	variables.put("approve", true); 
+//    	taskService.complete(task.getId(), variables);
+//
+//    	
+//    	System.out.println(processVariables.get("approve") + " wants " +
+//    	        processVariables.get("nrOfHolidays") + " of holidays. Do you approve this?");
     	
 //    	
 //    	Map<String, Object> variables = new HashMap<String, Object>();

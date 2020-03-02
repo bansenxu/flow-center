@@ -25,7 +25,7 @@
         <java.version>1.8</java.version>
         <mybatisplus-spring-boot-starter.version>1.0.4</mybatisplus-spring-boot-starter.version>
         <velocity.version>1.7</velocity.version>
-        <flowable.version>6.4.2</flowable.version>
+        <flowable.version>6.5.0</flowable.version>
         <skipTests>true</skipTests>
     </properties>
 
@@ -56,12 +56,12 @@
         <dependency>
             <groupId>org.flowable</groupId>
             <artifactId>flowable-http</artifactId>
-            <version>6.5.0-SNAPSHOT</version>
+            <version>6.5.1-SNAPSHOT</version>
         </dependency>
         <dependency>
             <groupId>org.flowable</groupId>
             <artifactId>flowable-bpmn-model</artifactId>
-            <version>6.5.0-SNAPSHOT</version>
+            <version>6.5.1-SNAPSHOT</version>
         </dependency>
         
         <dependency>

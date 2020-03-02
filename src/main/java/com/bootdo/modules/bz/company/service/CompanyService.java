@@ -24,7 +24,7 @@ public interface CompanyService {
 	
 	int update(CompanyDO company);
 	
-	int remove(String id);
+	int remove(String comCode);
 	
 	int batchRemove(String[] ids);
 }

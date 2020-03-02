@@ -25,7 +25,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
                 )
 @EnableAutoConfiguration(exclude={org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration.class})
 @ServletComponentScan
-@MapperScan({"com.bootdo.*.dao","com.bootdo.modules.*.dao","org.flowable.ui.modeler.domain"})
+@MapperScan({"com.bootdo.*.dao","com.bootdo.modules.*.dao","org.flowable.ui.modeler.domain","com.bootdo.modules.*.*.dao"})
 @ComponentScan({"com.bootdo.modules.flowable", "com.bootdo","org.flowable.ui.modeler","org.flowable.ui.common"})
 public class BootdoApplication {
     public static void main(String[] args) {

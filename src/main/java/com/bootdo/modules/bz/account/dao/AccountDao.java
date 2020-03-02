@@ -9,8 +9,8 @@ import com.bootdo.modules.bz.account.domain.AccountDO;
 
 /**
  * 
- * @author chglee
- * @email 1992lcg@163.com
+ * @author wangxing
+ * @email 358402521@qq.com
  * @date 2019-11-19 10:43:14
  */
 @Mapper

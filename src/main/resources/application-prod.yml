@@ -2,14 +2,16 @@ bootdo:
   uploadPath: D:/var/uploaded_files/
 logging:
   level:
-    root: info
-  #    com.bootdo: info
+    root: debug
+    com.bootdo: debug
+    com.bootdo.security: debug
+    com.alibaba.druid.pool: debug
   file: /var/log/seven-mo/flowable-service/flowable-service.log
 spring:
   datasource:
     type: com.alibaba.druid.pool.DruidDataSource
     driverClassName: com.mysql.jdbc.Driver
-    url: jdbc:mysql://122.112.4.150:3306/workflow?useUnicode=true&characterEncoding=utf8
+    url: jdbc:mysql://122.112.4.150:3306/fw65?useUnicode=true&characterEncoding=utf8
     username: root
     password: Bansenxu123abc!!!!!
     #url: ENC(N55qN9yxOuboFtK0H+ivxApdKZrzAcVxwkFYMN7p+4rTHwRAsWd6fOETmh4SW55MWgQJh91RBhUG5TSy557lQo+/wjcb/LK3Hu0x6E2ZIUTC6GJAVuaaGDJdEV2iC1TC)
@@ -55,7 +57,7 @@ spring:
         
         max-wait: -1
 server:
-  port: 8102
+  port: 8202
   max-http-header-size: 1024000
   
 flowable:

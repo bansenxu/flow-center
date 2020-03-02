@@ -4,14 +4,15 @@ import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.bootdo.common.utils.PageUtils;
 import com.bootdo.common.utils.Query;
@@ -27,7 +28,7 @@ import com.bootdo.modules.bz.account.service.AccountService;
  * @date 2019-11-19 10:43:14
  */
  
-@Controller
+@RestController
 @RequestMapping("/bz/account")
 public class AccountController {
 	@Autowired
@@ -39,6 +40,7 @@ public class AccountController {
 	    return "bz/account/account";
 	}
 	
+	@CrossOrigin
 	@ResponseBody
 	@GetMapping("/list")
 //	@RequiresPermissions("bz:account:account")
@@ -68,6 +70,7 @@ public class AccountController {
 	/**
 	 * 保存
 	 */
+	@CrossOrigin
 	@ResponseBody
 	@PostMapping("/save")
 //	@RequiresPermissions("bz:account:add")
@@ -80,6 +83,7 @@ public class AccountController {
 	/**
 	 * 修改
 	 */
+	@CrossOrigin
 	@ResponseBody
 	@RequestMapping("/update")
 //	@RequiresPermissions("bz:account:edit")
@@ -91,6 +95,7 @@ public class AccountController {
 	/**
 	 * 删除
 	 */
+	@CrossOrigin
 	@PostMapping( "/remove")
 	@ResponseBody
 //	@RequiresPermissions("bz:account:remove")

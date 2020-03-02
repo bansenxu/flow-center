@@ -4,7 +4,8 @@
 <mapper namespace="com.bootdo.modules.bz.shareRule.dao.ShareRuleDao">
 
 	<select id="get" resultType="com.bootdo.modules.bz.shareRule.domain.ShareRuleDO">
-		select `ID`,`sale_product_id`,`rule_type`,`rule_rate`,`memo`,`validate_state`,`create_date`,`edite_date`,in_com_code from share_rule where ID = #{value}
+		select `ID`,`sale_product_id`,`rule_type`,`rule_rate`,`memo`,`validate_state`,`create_date`,
+		`edite_date`,in_com_code from share_rule where ID = #{value}
 	</select>
 
 	<select id="list" resultType="com.bootdo.modules.bz.shareRule.domain.ShareRuleDO">
@@ -15,7 +16,7 @@
 		  		  <if test="ruleType != null and ruleType != ''"> and rule_type = #{ruleType} </if>
 		  		  <if test="ruleRate != null and ruleRate != ''"> and rule_rate = #{ruleRate} </if>
 		  		  <if test="memo != null and memo != ''"> and memo = #{memo} </if>
-		  		  <if test="validateState != null and validateState != ''"> and validate_state = #{validateState} </if>
+		  		  and validate_state = '1'
 		  		  <if test="createDate != null and createDate != ''"> and create_date = #{createDate} </if>
 		  		  <if test="editeDate != null and editeDate != ''"> and edite_date = #{editeDate} </if>
 		  		</where>
@@ -40,7 +41,7 @@
 		  		  <if test="ruleType != null and ruleType != ''"> and rule_type = #{ruleType} </if>
 		  		  <if test="ruleRate != null and ruleRate != ''"> and rule_rate = #{ruleRate} </if>
 		  		  <if test="memo != null and memo != ''"> and memo = #{memo} </if>
-		  		  <if test="validateState != null and validateState != ''"> and validate_state = #{validateState} </if>
+		  		  and validate_state = '1'
 		  		  <if test="createDate != null and createDate != ''"> and create_date = #{createDate} </if>
 		  		  <if test="editeDate != null and editeDate != ''"> and edite_date = #{editeDate} </if>
 		  		</where>
@@ -80,8 +81,6 @@
 			<if test="ruleType != null">`rule_type` = #{ruleType}, </if>
 			<if test="ruleRate != null">`rule_rate` = #{ruleRate}, </if>
 			<if test="memo != null">`memo` = #{memo}, </if>
-			<if test="validateState != null">`validate_state` = #{validateState}, </if>
-			<if test="createDate != null">`create_date` = #{createDate}, </if>
 			<if test="inComCode != null">`in_com_code` = #{inComCode}, </if>
 			`edite_date` = now()
 		</set>
@@ -89,7 +88,7 @@
 	</update>
 	
 	<delete id="remove">
-		delete from share_rule where ID = #{value}
+		update share_rule set validate_state='0' where ID = #{value}
 	</delete>
 	
 	<delete id="batchRemove">

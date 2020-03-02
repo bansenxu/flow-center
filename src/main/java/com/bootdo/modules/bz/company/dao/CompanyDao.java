@@ -26,7 +26,7 @@ public interface CompanyDao {
 	
 	int update(CompanyDO company);
 	
-	int remove(String ID);
+	int remove(String comCode);
 	
 	int batchRemove(String[] ids);
 }

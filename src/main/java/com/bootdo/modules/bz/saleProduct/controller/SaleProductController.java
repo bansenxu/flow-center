@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.bootdo.common.utils.PageUtils;
 import com.bootdo.common.utils.Query;
@@ -28,7 +29,7 @@ import com.bootdo.modules.bz.saleProduct.service.SaleProductService;
  * @date 2019-11-20 09:43:14
  */
  
-@Controller
+@RestController
 @RequestMapping("/bz/sale_product")
 public class SaleProductController {
 	@Autowired

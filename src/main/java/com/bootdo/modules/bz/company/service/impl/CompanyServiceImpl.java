@@ -43,8 +43,8 @@ public class CompanyServiceImpl implements CompanyService {
 	}
 	
 	@Override
-	public int remove(String id){
-		return companyDao.remove(id);
+	public int remove(String comCode){
+		return companyDao.remove(comCode);
 	}
 	
 	@Override

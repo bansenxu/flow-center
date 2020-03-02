@@ -4,11 +4,11 @@
 <mapper namespace="com.bootdo.modules.bz.account.dao.AccountDao">
 
 	<select id="get" resultType="com.bootdo.modules.bz.account.domain.AccountDO">
-		select `ID`,`com_code`,`account_code`,`balance`,`cou_balance`,`cre_balance`,`ice_amount`,`rec_balance`,`create_date`,`edite_date`,`validate_state` from account where ID = #{value}
+		select ID,com_code,account_code,balance,cou_balance,cre_balance,ice_amount,rec_balance,create_date,edite_date,validate_state from account where ID = #{value}
 	</select>
 
 	<select id="list" resultType="com.bootdo.modules.bz.account.domain.AccountDO">
-		select `ID`,`com_code`,`account_code`,`balance`,`cou_balance`,`cre_balance`,`ice_amount`,`rec_balance`,`create_date`,`edite_date`,`validate_state` from account
+		select ID,com_code,account_code,balance,cou_balance,cre_balance,ice_amount,rec_balance,create_date,edite_date,validate_state from account
         <where>  
 		  		  <if test="id != null and id != ''"> and ID = #{id} </if>
 		  		  <if test="comCode != null and comCode != ''"> and com_code = #{comCode} </if>
@@ -20,7 +20,7 @@
 		  		  <if test="recBalance != null and recBalance != ''"> and rec_balance = #{recBalance} </if>
 		  		  <if test="createDate != null and createDate != ''"> and create_date = #{createDate} </if>
 		  		  <if test="editeDate != null and editeDate != ''"> and edite_date = #{editeDate} </if>
-		  		  <if test="validateState != null and validateState != ''"> and validate_state = #{validateState} </if>
+		  		  and validate_state = '1'
 		  		</where>
         <choose>
             <when test="sort != null and sort.trim() != ''">
@@ -48,24 +48,24 @@
 		  		  <if test="recBalance != null and recBalance != ''"> and rec_balance = #{recBalance} </if>
 		  		  <if test="createDate != null and createDate != ''"> and create_date = #{createDate} </if>
 		  		  <if test="editeDate != null and editeDate != ''"> and edite_date = #{editeDate} </if>
-		  		  <if test="validateState != null and validateState != ''"> and validate_state = #{validateState} </if>
+		  		  and validate_state = '1'
 		  		</where>
 	</select>
 	 
 	<insert id="save" parameterType="com.bootdo.modules.bz.account.domain.AccountDO">
 		insert into account
 		(
-			`ID`, 
-			`com_code`, 
-			`account_code`, 
-			`balance`, 
-			`cou_balance`, 
-			`cre_balance`, 
-			`ice_amount`, 
-			`rec_balance`, 
-			`create_date`, 
-			`edite_date`, 
-			`validate_state`
+			ID, 
+			com_code, 
+			account_code, 
+			balance, 
+			cou_balance, 
+			cre_balance, 
+			ice_amount, 
+			rec_balance, 
+			create_date, 
+			edite_date, 
+			validate_state
 		)
 		values
 		(
@@ -86,16 +86,15 @@
 	<update id="update" parameterType="com.bootdo.modules.bz.account.domain.AccountDO">
 		update account 
 		<set>
-			<if test="comCode != null">`com_code` = #{comCode}, </if>
-			<if test="accountCode != null">`account_code` = #{accountCode}, </if>
-			<if test="balance != null">`balance` = #{balance}, </if>
-			<if test="couBalance != null">`cou_balance` = #{couBalance}, </if>
-			<if test="creBalance != null">`cre_balance` = #{creBalance}, </if>
-			<if test="iceAmount != null">`ice_amount` = #{iceAmount}, </if>
-			<if test="recBalance != null">`rec_balance` = #{recBalance}, </if>
-			<if test="createDate != null">`create_date` = #{createDate}, </if>
-			<if test="editeDate != null">`edite_date` = #{editeDate}, </if>
-			<if test="validateState != null">`validate_state` = #{validateState}</if>
+			<if test="comCode != null">com_code = #{comCode}, </if>
+			<if test="accountCode != null">account_code = #{accountCode}, </if>
+			<if test="balance != null">balance = #{balance}, </if>
+			<if test="couBalance != null">cou_balance = #{couBalance}, </if>
+			<if test="creBalance != null">cre_balance = #{creBalance}, </if>
+			<if test="iceAmount != null">ice_amount = #{iceAmount}, </if>
+			<if test="recBalance != null">rec_balance = #{recBalance}, </if>
+			<if test="createDate != null">create_date = #{createDate}, </if>
+			edite_date = now(),
 		</set>
 		where ID = #{id}
 	</update>

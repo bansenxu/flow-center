@@ -4,11 +4,15 @@
 <mapper namespace="com.bootdo.modules.bz.saleProduct.dao.SaleProductDao">
 
 	<select id="get" resultType="com.bootdo.modules.bz.saleProduct.domain.SaleProductDO">
-		select `ID`,`product_name`,`product_code`,`g_com_code`,`product_price`,`min_price`,`max_price`,`retail_com_code`,`state`,`validate_state`,`create_date`,`edit_date`,`start_date`,`end_date` from sale_product where ID = #{value}
+		select ID,product_name,product_code,g_com_code,product_price,min_price,
+		max_price,retail_com_code,state,validate_state,create_date,edit_date,
+		start_date,end_date from sale_product where ID = #{value}
 	</select>
 
 	<select id="list" resultType="com.bootdo.modules.bz.saleProduct.domain.SaleProductDO">
-		select `ID`,`product_name`,`product_code`,`g_com_code`,`product_price`,`min_price`,`max_price`,`retail_com_code`,`state`,`validate_state`,`create_date`,`edit_date`,`start_date`,`end_date` from sale_product
+		select ID,product_name,product_code,g_com_code,product_price,min_price,
+		max_price,retail_com_code,state,validate_state,create_date,edit_date,
+		start_date,end_date from sale_product
         <where>  
 		  		  <if test="id != null and id != ''"> and ID = #{id} </if>
 		  		  <if test="productName != null and productName != ''"> and product_name = #{productName} </if>
@@ -19,11 +23,11 @@
 		  		  <if test="maxPrice != null and maxPrice != ''"> and max_price = #{maxPrice} </if>
 		  		  <if test="retailComCode != null and retailComCode != ''"> and retail_com_code = #{retailComCode} </if>
 		  		  <if test="state != null and state != ''"> and state = #{state} </if>
-		  		  <if test="validateState != null and validateState != ''"> and validate_state = #{validateState} </if>
 		  		  <if test="createDate != null and createDate != ''"> and create_date = #{createDate} </if>
 		  		  <if test="editDate != null and editDate != ''"> and edit_date = #{editDate} </if>
 		  		  <if test="startDate != null and startDate != ''"> and start_date = #{startDate} </if>
 		  		  <if test="endDate != null and endDate != ''"> and end_date = #{endDate} </if>
+		  		  and validate_state = '1'
 		  		</where>
         <choose>
             <when test="sort != null and sort.trim() != ''">
@@ -50,31 +54,31 @@
 		  		  <if test="maxPrice != null and maxPrice != ''"> and max_price = #{maxPrice} </if>
 		  		  <if test="retailComCode != null and retailComCode != ''"> and retail_com_code = #{retailComCode} </if>
 		  		  <if test="state != null and state != ''"> and state = #{state} </if>
-		  		  <if test="validateState != null and validateState != ''"> and validate_state = #{validateState} </if>
 		  		  <if test="createDate != null and createDate != ''"> and create_date = #{createDate} </if>
 		  		  <if test="editDate != null and editDate != ''"> and edit_date = #{editDate} </if>
 		  		  <if test="startDate != null and startDate != ''"> and start_date = #{startDate} </if>
 		  		  <if test="endDate != null and endDate != ''"> and end_date = #{endDate} </if>
+		  		  and validate_state = '1'
 		  		</where>
 	</select>
 	 
 	<insert id="save" parameterType="com.bootdo.modules.bz.saleProduct.domain.SaleProductDO">
 		insert into sale_product
 		(
-			`ID`, 
-			`product_name`, 
-			`product_code`, 
-			`g_com_code`, 
-			`product_price`, 
-			`min_price`, 
-			`max_price`, 
-			`retail_com_code`, 
-			`state`, 
-			`validate_state`, 
-			`create_date`, 
-			`edit_date`, 
-			`start_date`, 
-			`end_date`
+			ID, 
+			product_name, 
+			product_code, 
+			g_com_code, 
+			product_price, 
+			min_price, 
+			max_price, 
+			retail_com_code, 
+			state, 
+			validate_state, 
+			create_date, 
+			edit_date, 
+			start_date, 
+			end_date
 		)
 		values
 		(
@@ -98,25 +102,24 @@
 	<update id="update" parameterType="com.bootdo.modules.bz.saleProduct.domain.SaleProductDO">
 		update sale_product 
 		<set>
-			<if test="productName != null">`product_name` = #{productName}, </if>
-			<if test="productCode != null">`product_code` = #{productCode}, </if>
-			<if test="gComCode != null">`g_com_code` = #{gComCode}, </if>
-			<if test="productPrice != null">`product_price` = #{productPrice}, </if>
-			<if test="minPrice != null">`min_price` = #{minPrice}, </if>
-			<if test="maxPrice != null">`max_price` = #{maxPrice}, </if>
-			<if test="retailComCode != null">`retail_com_code` = #{retailComCode}, </if>
-			<if test="state != null">`state` = #{state}, </if>
-			<if test="validateState != null">`validate_state` = #{validateState}, </if>
-			<if test="createDate != null">`create_date` = #{createDate}, </if>
-			<if test="editDate != null">`edit_date` = #{editDate}, </if>
-			<if test="startDate != null">`start_date` = #{startDate}, </if>
-			`end_date` = now()
+			<if test="productName != null">product_name = #{productName}, </if>
+			<if test="productCode != null">product_code = #{productCode}, </if>
+			<if test="gComCode != null">g_com_code = #{gComCode}, </if>
+			<if test="productPrice != null">product_price = #{productPrice}, </if>
+			<if test="minPrice != null">min_price = #{minPrice}, </if>
+			<if test="maxPrice != null">max_price = #{maxPrice}, </if>
+			<if test="retailComCode != null">retail_com_code = #{retailComCode}, </if>
+			<if test="state != null">state = #{state}, </if>
+			<if test="validateState != null">validate_state = #{validateState}, </if>
+			<if test="createDate != null">create_date = #{createDate}, </if>
+			<if test="startDate != null">start_date = #{startDate}, </if>
+			end_date = now()
 		</set>
 		where ID = #{id}
 	</update>
 	
 	<delete id="remove">
-		delete from sale_product where ID = #{value}
+		update sale_product set validate_state = '0' where ID = #{value}
 	</delete>
 	
 	<delete id="batchRemove">

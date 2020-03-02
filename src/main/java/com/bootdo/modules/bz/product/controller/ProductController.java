@@ -6,12 +6,15 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.bootdo.common.utils.PageUtils;
 import com.bootdo.common.utils.Query;
@@ -27,7 +30,7 @@ import com.bootdo.modules.bz.product.service.ProductService;
  * @date 2019-11-18 17:03:39
  */
  
-@Controller
+@RestController
 @RequestMapping("/bz/product")
 //@Api(tags = "BookController", description = "BookController | 通过书来测试swagger")
 public class ProductController {
@@ -39,9 +42,10 @@ public class ProductController {
 	    return "bz/product/product";
 	}
 	
+	@CrossOrigin
 	@ResponseBody
-	@GetMapping("/list")
-	public PageUtils list(@RequestParam Map<String, Object> params){
+	@PostMapping("/list")
+	public PageUtils list(@RequestBody Map<String, Object> params){
 		//查询列表数据
         Query query = new Query(params);
 		List<ProductDO> productList = productService.list(query);
@@ -71,9 +75,10 @@ public class ProductController {
 	/**
 	 * 保存
 	 */
+	@CrossOrigin
 	@ResponseBody
 	@PostMapping("/save")
-	public R save( ProductDO product){
+	public R save(@RequestBody  ProductDO product){
 		if(productService.save(product)>0){
 			return R.ok();
 		}
@@ -82,9 +87,10 @@ public class ProductController {
 	/**
 	 * 修改
 	 */
+	@CrossOrigin
 	@ResponseBody
-	@RequestMapping("/update")
-	public R update( ProductDO product){
+	@PostMapping("/update")
+	public R update(@RequestBody  ProductDO product){
 		productService.update(product);
 		return R.ok();
 	}
@@ -92,9 +98,10 @@ public class ProductController {
 	/**
 	 * 删除
 	 */
-	@PostMapping( "/remove")
+	@CrossOrigin
 	@ResponseBody
-	public R remove( String id){
+	@PostMapping( "/remove")
+	public R remove(@RequestParam("id") String id){
 		if(productService.remove(id)>0){
 		return R.ok();
 		}

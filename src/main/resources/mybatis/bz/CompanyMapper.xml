@@ -4,11 +4,12 @@
 <mapper namespace="com.bootdo.modules.bz.company.dao.CompanyDao">
 
 	<select id="get" resultType="com.bootdo.modules.bz.company.domain.CompanyDO">
-		select `ID`,`com_name`,`com_code`,`statue`,`com_type`,`create_date`,`edite_date`,`inv_com_code`,`validate_state` from company where ID = #{value}
+		select ID,com_name,com_code,statue,com_type,create_date,edite_date,inv_com_code,validate_state from company where ID = #{value}
 	</select>
 
 	<select id="list" resultType="com.bootdo.modules.bz.company.domain.CompanyDO">
-		select `ID`,`com_name`,`com_code`,`statue`,`com_type`,`create_date`,`edite_date`,`inv_com_code`,`validate_state` from company
+		select ID,com_name,com_code,statue,com_type,create_date,edite_date,inv_com_code,validate_state 
+		from company
         <where>  
 		  		  <if test="id != null and id != ''"> and ID = #{id} </if>
 		  		  <if test="comName != null and comName != ''"> and com_name = #{comName} </if>
@@ -18,7 +19,7 @@
 		  		  <if test="createDate != null and createDate != ''"> and create_date = #{createDate} </if>
 		  		  <if test="editeDate != null and editeDate != ''"> and edite_date = #{editeDate} </if>
 		  		  <if test="invComCode != null and invComCode != ''"> and inv_com_code = #{invComCode} </if>
-		  		  <if test="validateState != null and validateState != ''"> and validate_state = #{validateState} </if>
+		  		  and validate_state = '1'
 		  		</where>
         <choose>
             <when test="sort != null and sort.trim() != ''">
@@ -44,22 +45,22 @@
 		  		  <if test="createDate != null and createDate != ''"> and create_date = #{createDate} </if>
 		  		  <if test="editeDate != null and editeDate != ''"> and edite_date = #{editeDate} </if>
 		  		  <if test="invComCode != null and invComCode != ''"> and inv_com_code = #{invComCode} </if>
-		  		  <if test="validateState != null and validateState != ''"> and validate_state = #{validateState} </if>
+		  		   and validate_state = '1'
 		  		</where>
 	</select>
 	 
 	<insert id="save" parameterType="com.bootdo.modules.bz.company.domain.CompanyDO">
 		insert into company
 		(
-			`ID`, 
-			`com_name`, 
-			`com_code`, 
-			`statue`, 
-			`com_type`, 
-			`create_date`, 
-			`edite_date`, 
-			`inv_com_code`, 
-			`validate_state`
+			ID, 
+			com_name, 
+			com_code, 
+			statue, 
+			com_type, 
+			create_date, 
+			edite_date, 
+			inv_com_code, 
+			validate_state
 		)
 		values
 		(
@@ -78,20 +79,18 @@
 	<update id="update" parameterType="com.bootdo.modules.bz.company.domain.CompanyDO">
 		update company 
 		<set>
-			<if test="comName != null">`com_name` = #{comName}, </if>
-			<if test="comCode != null">`com_code` = #{comCode}, </if>
-			<if test="statue != null">`statue` = #{statue}, </if>
-			<if test="comType != null">`com_type` = #{comType}, </if>
-			<if test="createDate != null">`create_date` = #{createDate}, </if>
-			<if test="editeDate != null">`edite_date` = #{editeDate}, </if>
-			<if test="invComCode != null">`inv_com_code` = #{invComCode}, </if>
-			<if test="validateState != null">`validate_state` = #{validateState}</if>
+			<if test="comName != null">com_name = #{comName}, </if>
+			<!--if test="comCode != null">com_code = #{comCode}, </if-->
+			<if test="statue != null">statue = #{statue}, </if>
+			<if test="comType != null">com_type = #{comType}, </if>
+			edite_date = now(),
+			<if test="invComCode != null">inv_com_code = #{invComCode}, </if>
 		</set>
-		where ID = #{id}
+		where com_code = #{comCode}
 	</update>
 	
 	<delete id="remove">
-		delete from company where ID = #{value}
+		update company set validate_state='0' where com_code = #{value}
 	</delete>
 	
 	<delete id="batchRemove">
