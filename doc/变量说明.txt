@@ -1,0 +1,17 @@
+变量获取方式 ${变量名称}
+
+shellNode
+变量名称                                                                   枚举值
+节点id + ResponseStatusCode    200-成功   500-失败
+节点id + ShellNodeResult 
+
+sqlNode
+变量名称                                                                   枚举值
+节点id + ResponseStatusCode    200-成功   500-失败
+节点id + SqlResult 
+
+httpNode
+变量名称                                                                   枚举值
+节点id + ResponseStatusCode    200-成功   500-失败
+节点id + ResponseReason
+节点id + ResponseBody 

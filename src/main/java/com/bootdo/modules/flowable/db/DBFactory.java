@@ -31,12 +31,13 @@ public class DBFactory {
 		return conn;
 	}
 	
-	public List execSql(ExtDatasourceDO ds,String sql,Map<String,Object> param)throws Exception
+	public Map<String,Object> execSql(ExtDatasourceDO ds,String sql,Map<String,Object> param)throws Exception
 	{
 		Connection conn = getConnection(ds);
 		sql = VarReplaceUtil.replace_var(sql,param);
 		Statement st = conn.createStatement();
 		List<Map<String,Object>> list = new ArrayList<Map<String,Object>>();
+		Map<String,Object> result_map = new HashMap<String,Object>();
 		
 		if(sql.indexOf("select")>-1 && sql.indexOf("insert")<0)
 		{
@@ -53,13 +54,17 @@ public class DBFactory {
 	        	}
 	        	list.add(temp);
 			}
+			result_map.put("sqlType", "select");
+			String json_re = JSON.toJSONString(list);
+			result_map.put("sqlResult", json_re);
 		}else{
 			logger.debug("dmlSql:"+sql);
 			boolean bl = st.execute(sql);
 			logger.debug("dmlSqlResult:"+bl);
+			result_map.put("sqlType", "iud");
+			result_map.put("sqlResult", bl);
 		}
-		
-		return list;
+		return result_map;
 	}
 	
 	public static void main(String[] ss)

@@ -37,7 +37,6 @@ public class ShellNode implements JavaDelegate{
 	@Override
 	public void execute(DelegateExecution execution) {
 		
-
 		// TODO Auto-generated method stub
 		Map<String, Object> map = execution.getVariables();
 		String result = "";
@@ -92,7 +91,7 @@ public class ShellNode implements JavaDelegate{
 		return result;
 	}
 	
-	public static void main(String[] ss)
+	public static void main(String[] ss)throws Exception
 	{
 		String ip = "122.112.4.152";
 		String username = "root";
@@ -143,7 +142,7 @@ public class ShellNode implements JavaDelegate{
 	 * * @return 命令执行完后返回的结果值
 	 */
 
-	private static String execmd(Connection connection, String cmd) {
+	private static String execmd(Connection connection, String cmd)throws Exception {
 		String result = "";
 		InputStream stdOut = null;
 		InputStream stdErr = null;
@@ -183,7 +182,7 @@ public class ShellNode implements JavaDelegate{
 			}
 		} catch (IOException e) {
 			logger.error("执行命令失败,链接conn:" + connection + ",执行的命令：" + cmd + "  " + e);
-			e.printStackTrace();
+			throw e;
 		}
 		return result;
 

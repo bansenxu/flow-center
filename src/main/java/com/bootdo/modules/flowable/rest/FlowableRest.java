@@ -212,7 +212,12 @@ public class FlowableRest {
 		for(HiVarInstDO tem:result2)
 		{
 			tmp = new HashMap<String,Object>();
-		    tmp.put(tem.getName().replace("hist.var-", ""), tem.getText().replace("\u0000", ""));
+			if(tem.getText()!=null) {
+				tmp.put(tem.getName().replace("hist.var-", ""), tem.getText().replace("\u0000", ""));
+			}else
+			{
+				tmp.put(tem.getName().replace("hist.var-", ""), "");
+			}
 		    re.add(tmp);
 		}
 		return JSON.toJSONString(re);

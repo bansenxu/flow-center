@@ -30,21 +30,21 @@ public class SqlNode implements JavaDelegate{
 		DBFactory dbf = new DBFactory();
     	
 		try {
-			List result = dbf.execSql((ExtDatasourceDO)map.get(execution.getCurrentActivityId()+"-ds"), sql, map);
+			Map<String,Object> result = dbf.execSql((ExtDatasourceDO)map.get(execution.getCurrentActivityId()+"-ds"), sql, map);
 			execution.setVariable(execution.getCurrentActivityId()+"ResponseStatusCode", "200");
 			String resultStr = "";
-			if(result.size()==1)
+			if(!result.get("sqlType").toString().equals("select"))
 			{
-				resultStr = result.get(0).toString();
+				resultStr = result.get("sqlResult").toString();
 				if(resultStr.indexOf("=")>0) {
 					resultStr = resultStr.substring(resultStr.indexOf("=")+1, resultStr.length()-1);
 				}
-				execution.setVariable(execution.getCurrentActivityId()+"SelectResult", resultStr);
+				execution.setVariable(execution.getCurrentActivityId()+"SqlResult", resultStr);
 			}else
 			{
-				execution.setVariable(execution.getCurrentActivityId()+"SelectResult", result);
+				execution.setVariable(execution.getCurrentActivityId()+"SqlResult", result.get("sqlResult"));
 			}
-			logger.debug(execution.getCurrentActivityId()+"SelectResult", result);
+			logger.debug(execution.getCurrentActivityId()+"SqlResult", result);
 			logger.debug(execution.getCurrentActivityId()+"ResponseStatusCode", "200");
 		} catch (Exception e) {
 			execution.setVariable(execution.getCurrentActivityId()+"ResponseStatusCode", "500");
