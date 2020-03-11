@@ -186,29 +186,29 @@ public class FlowableRest {
 	
 	public String getResultJson(String pid)throws Exception
 	{
-		List<ByteArrayEntityImpl>  result = geByteArrayService.selectBytesOfByteArray(pid);
+		//List<ByteArrayEntityImpl>  result = geByteArrayService.selectBytesOfByteArray(pid);
 		List<HiVarInstDO> result2 = hiVarInstService.selectHiVarInst(pid);
 		Map<String,Object> tmp  = null;
 		ByteArrayInputStream msgContent = null;
 		List re = new ArrayList();
-		for(ByteArrayEntityImpl tem:result)
-		{
-		    ByteArrayInputStream byteInt=new ByteArrayInputStream(tem.getBytes());
-		    ObjectInputStream objInt=new ObjectInputStream(byteInt);
-		    tmp = new HashMap<String,Object>();
-		    try {
-		    	List<ByteArrayEntity> tem_result = (List<ByteArrayEntity>)objInt.readObject();//byte[]转map
-			    tmp.put(tem.getName().replace("hist.var-", ""), tem_result);
-			    re.add(tmp);
-			    logger.debug(tem.getName()+" is ByteArrayEntity.");
-		    }catch(Exception e)
-		    {
-		    	logger.debug(tem.getName()+" is String.");
-		    	String tem_result = objInt.readObject().toString();//byte[]转map
-			    tmp.put(tem.getName().replace("hist.var-", ""), tem_result);
-			    re.add(tmp);
-		    }
-		}
+//		for(ByteArrayEntityImpl tem:result)
+//		{
+//		    ByteArrayInputStream byteInt=new ByteArrayInputStream(tem.getBytes());
+//		    ObjectInputStream objInt=new ObjectInputStream(byteInt);
+//		    tmp = new HashMap<String,Object>();
+//		    try {
+//		    	List<ByteArrayEntity> tem_result = (List<ByteArrayEntity>)objInt.readObject();//byte[]转map
+//			    tmp.put(tem.getName().replace("hist.var-", ""), tem_result);
+//			    re.add(tmp);
+//			    logger.debug(tem.getName()+" is ByteArrayEntity.");
+//		    }catch(Exception e)
+//		    {
+//		    	logger.debug(tem.getName()+" is String.");
+//		    	String tem_result = objInt.readObject().toString();//byte[]转map
+//			    tmp.put(tem.getName().replace("hist.var-", ""), tem_result);
+//			    re.add(tmp);
+//		    }
+//		}
 		for(HiVarInstDO tem:result2)
 		{
 			tmp = new HashMap<String,Object>();

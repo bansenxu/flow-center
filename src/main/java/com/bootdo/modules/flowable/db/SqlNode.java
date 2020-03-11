@@ -11,6 +11,7 @@ import org.flowable.engine.delegate.DelegateExecution;
 import org.flowable.engine.delegate.JavaDelegate;
 import org.springframework.stereotype.Component;
 
+import com.alibaba.fastjson.JSON;
 import com.bootdo.modules.flowable.domain.ExtDatasourceDO;
 
 @Component
@@ -35,11 +36,10 @@ public class SqlNode implements JavaDelegate{
 			String resultStr = "";
 			if(!result.get("sqlType").toString().equals("select"))
 			{
-				resultStr = result.get("sqlResult").toString();
 				if(resultStr.indexOf("=")>0) {
 					resultStr = resultStr.substring(resultStr.indexOf("=")+1, resultStr.length()-1);
 				}
-				execution.setVariable(execution.getCurrentActivityId()+"SqlResult", resultStr);
+				execution.setVariable(execution.getCurrentActivityId()+"SqlResult", JSON.toJSONString(result.get("sqlResult")));
 			}else
 			{
 				execution.setVariable(execution.getCurrentActivityId()+"SqlResult", result.get("sqlResult"));

@@ -6,8 +6,19 @@
 
   <select id="selectHiVarInst" parameterType="string" resultType="com.bootdo.modules.flowable.domain.HiVarInstDO">
 	select b.NAME_,b.TEXT_ from act_hi_varinst b 
-	where b.EXECUTION_ID_=#{id, jdbcType=VARCHAR} 
-	and b.NAME_ like 'shellCmdShellNodeResult%' order by b.CREATE_TIME_ desc
+		where b.EXECUTION_ID_=#{id, jdbcType=VARCHAR} 
+		and (b.NAME_ like '%ShellNodeResult%' or 
+			 b.NAME_ like '%SqlResult%' or 
+			 b.NAME_ like '%ResponseBody%' ) 
+		and b.BYTEARRAY_ID_ is null
+	union
+	select b.NAME_ , b.BYTES_ as TEXT_ from act_ge_bytearray b where b.ID_ in(
+		select a.BYTEARRAY_ID_ from act_hi_varinst a where 
+			a.PROC_INST_ID_= #{id, jdbcType=VARCHAR}
+			and (a.NAME_ like '%SqlResult%' or 
+			     a.NAME_ like '%ShellNodeResult%' or
+				 a.NAME_ like '%ResponseBody%' )
+			and BYTEARRAY_ID_ is not null
+		)
   </select>
-
 </mapper>

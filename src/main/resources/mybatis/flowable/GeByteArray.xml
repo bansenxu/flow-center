@@ -6,8 +6,11 @@
 
   <select id="selectBytesOfByteArray" parameterType="string" resultType="org.flowable.engine.impl.persistence.entity.ByteArrayEntityImpl">
     select b.NAME_ , b.BYTES_ from act_ge_bytearray b where b.ID_ in(
-	select a.BYTEARRAY_ID_ from act_hi_varinst a where 
-		a.PROC_INST_ID_= #{id, jdbcType=VARCHAR} and a.NAME_ like '%SelectResult%')
+		select a.BYTEARRAY_ID_ from act_hi_varinst a where 
+			a.PROC_INST_ID_= #{id, jdbcType=VARCHAR} 
+			and (a.NAME_ like '%SelectResult%' or a.NAME_ like '%ResponseBody')
+			and a.VAR_TYPE_='serializable'
+		)
   </select>
   
   <resultMap id="byteArrayResultMap" type="org.flowable.engine.impl.persistence.entity.ByteArrayEntityImpl">
