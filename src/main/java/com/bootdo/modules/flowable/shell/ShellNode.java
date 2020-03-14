@@ -13,11 +13,11 @@ import org.flowable.bpmn.model.ext.ExtChildNode;
 import org.flowable.bpmn.model.ext.ExtModelEditor;
 import org.flowable.engine.delegate.DelegateExecution;
 import org.flowable.engine.delegate.JavaDelegate;
-import org.flowable.http.bpmn.util.VarReplaceUtil;
 import org.springframework.stereotype.Component;
 
 import com.bootdo.modules.flowable.domain.ExtDatasourceDO;
 import com.bootdo.modules.flowable.rest.FlowableRest;
+import com.bootdo.modules.flowable.utils.VarReplaceUtil;
 
 import ch.ethz.ssh2.ChannelCondition;
 import ch.ethz.ssh2.Connection;
